@@ -17,6 +17,9 @@ namespace NEA
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
+
+            DatabaseManager db = new DatabaseManager();
+            db.InitializeDatabase();
         }
     }
 }
