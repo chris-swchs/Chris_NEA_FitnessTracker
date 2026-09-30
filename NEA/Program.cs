@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+
 namespace NEA
 {
 
@@ -12,7 +13,8 @@ namespace NEA
     //Contains all of the possible sets of muscle groups
     public enum MuscleGroup
     {
-        Chest,
+        UpperChest,
+        LowerChest,
         FrontShoulders,
         SideShoulders,
         RearShoulders,
@@ -58,6 +60,12 @@ namespace NEA
         {
             DatabaseManager db = new DatabaseManager();
             db.InitializeDatabase();
+
+            //Adding all the exercises
+            db.AddExerciseRecord("flat Bench Press",
+                ExerciseType.Strength,
+                MuscleGroup.LowerChest,
+                "Push the bar up and down while laying flat on a flat-adjusted bench");
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
