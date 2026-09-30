@@ -6,6 +6,49 @@ using System.Windows.Forms;
 
 namespace NEA
 {
+
+    //Enum variables
+
+    //Contains all of the possible sets of muscle groups
+    public enum MuscleGroup
+    {
+        Chest,
+        FrontShoulders,
+        SideShoulders,
+        RearShoulders,
+        Triceps,
+        Biceps,
+        Forearms,
+        UpperBack,
+        LowerBack,
+        UpperCore,
+        LowerCore,
+        Obliques,
+        Quads,
+        Hamstrings,
+        Glutes,
+        Adductors,
+        Abductors,
+        Calves
+    }
+
+    //Contains all of the possible sets of exercise types
+    public enum ExerciseType
+    {
+        Strength,
+        Flexibility,
+        Cardio,
+        WarmUp,
+        Power,
+        Pylometric
+    }
+
+    //Contains all of the possible sets of workout types
+    public enum WorkoutType
+    {
+        Strength,
+        Cardio
+    }
     internal static class Program
     {
         /// <summary>
@@ -17,6 +60,9 @@ namespace NEA
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
+
+            DatabaseManager db = new DatabaseManager();
+            db.InitializeDatabase();
         }
     }
 }
