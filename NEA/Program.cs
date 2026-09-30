@@ -38,8 +38,7 @@ namespace NEA
         Strength,
         Flexibility,
         Cardio,
-        WarmUp,
-        Power,
+        Balance,
         Pylometric
     }
 
@@ -57,12 +56,12 @@ namespace NEA
         [STAThread]
         static void Main()
         {
+            DatabaseManager db = new DatabaseManager();
+            db.InitializeDatabase();
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
-
-            DatabaseManager db = new DatabaseManager();
-            db.InitializeDatabase();
         }
     }
 }

@@ -38,10 +38,10 @@ namespace NEA
                 string createExerciseTableQuery = @"
                CREATE TABLE IF NOT EXISTS User (
                     ExerciseID INTEGER PRIMARY KEY AUTOINCREMENT,
-                    Name TEXT
-                    ExerciseType (VARCHAR(255) NOT NULL UNIQUE,
-                    TargetMuscle VARCHAR(255)
-                    Details Text
+                    Name TEXT NOT NULL
+                    ExerciseType TEXT NOT NULL,
+                    TargetMuscle TEXT NOT NULL
+                    Details TEXT NOT NULL
                 );";
 
                 using (var command = new SqliteCommand(createUserTableQuery, connection))
@@ -66,6 +66,8 @@ namespace NEA
                         command.Parameters.AddWithValue("@Details", Details);
 
                         command.ExecuteNonQuery();
+
+                        Console.WriteLine("Database and 'Users' table created successfully!");
                     }
                 }
             }
