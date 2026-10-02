@@ -103,7 +103,7 @@ namespace NEA
                 }
             }
         }
-=        public string GetExerciseName(int ExerciseID)
+        public string GetExerciseName(int ExerciseID)
         {
             using (var connection = new SqliteConnection(connectionString))
             {
