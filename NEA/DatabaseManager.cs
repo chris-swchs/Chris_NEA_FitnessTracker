@@ -32,7 +32,7 @@ namespace NEA
                     DateCreated TEXT
                     
                 );";
-
+                    
                 // Creates EXERCISE table
                 string createExerciseTableQuery = @"
                CREATE TABLE IF NOT EXISTS Exercise (
@@ -70,8 +70,8 @@ namespace NEA
                     command.Parameters.AddWithValue("@Details", details);
 
                     command.ExecuteNonQuery();
-                }
-            }
+    }
+}
         }
 
         //Functions for retrieving a field of data from the ExerciseTable
