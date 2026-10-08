@@ -34,7 +34,7 @@ namespace NEA
         Calves
     }
 
-    //Contains all of the possible sets of exercise types
+    //Contains list of the possible sets of exercise types
     public enum ExerciseType
     {
         Strength,
@@ -44,11 +44,19 @@ namespace NEA
         Pylometric
     }
 
-    //Contains all of the possible sets of workout types
+    //Contains list of the possible sets of workout types
     public enum WorkoutType
     {
         Strength,
         Cardio
+    }
+
+    //Contains list of all the possible equipments which are available to the program
+    public enum Equipment
+    {
+        Bench,
+        Dumbell,
+        Barbell
     }
     internal static class Program
     {
@@ -70,9 +78,6 @@ namespace NEA
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
-
-            DatabaseManager db = new DatabaseManager();
-            db.InitializeDatabase();
         }
     }
 }

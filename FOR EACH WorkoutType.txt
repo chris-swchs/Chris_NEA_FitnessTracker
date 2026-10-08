@@ -1,0 +1,13 @@
+FOR EACH WorkoutType
+
+	Score = 0
+	
+	Score += muscle priority suitability
+	Score += goal suitability
+	Score += weekly balance
+		
+	Score -= recently trained
+	Score -= excessive repeated muscle use
+
+SELECT WorkoutType with highest Score
+	
