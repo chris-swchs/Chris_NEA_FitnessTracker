@@ -35,57 +35,58 @@ namespace NEA
 
                 // Creates USER table
                 string CreateTables = @"
-               CREATE TABLE IF NOT EXISTS User (
-                    UserID TEXT PRIMARY KEY UNIQUE,
-                    Email  TEXT NOT NULL UNIQUE,
-                    PasswordHash TEXT NOT NULL,
-                    DateCreated TEXT
-                );
-                
-                CREATE TABLE IF NOT EXISTS Exercise (
-                    ExerciseID INTEGER PRIMARY KEY AUTOINCREMENT,
-                    Name TEXT NOT NULL,
-                    ExerciseType TEXT NOT NULL,
-                    TargetMuscle TEXT NOT NULL,
-                    Details TEXT NOT NULL
-                );
+                 CREATE TABLE IF NOT EXISTS User (
+                      UserID TEXT PRIMARY KEY UNIQUE,
+                      Email TEXT NOT NULL UNIQUE,
+                      PasswordHash TEXT NOT NULL,
+                      DateCreated TEXT
+                  );
+              
+                  CREATE TABLE IF NOT EXISTS Exercise (
+                      ExerciseID INTEGER PRIMARY KEY AUTOINCREMENT,
+                      Name TEXT NOT NULL,
+                      ExerciseType TEXT NOT NULL,
+                      TargetMuscle TEXT NOT NULL,
+                      Details TEXT NOT NULL
+                  );
 
-                CREATE TABLE IF NOT EXISTS UserAvailableEquipment (
-                    UserAvailableEquipmentID INTEGER PRIMARY KEY AUTOINCREMENT,
-                    Equipment TEXT NOT NULL,
-                    UserID TEXT,
-                    FOREIGN KEY (UserID) REFERENCES User(UserID)
-                );
+                  CREATE TABLE IF NOT EXISTS UserAvailableEquipment (
+                      UserAvailableEquipmentID INTEGER PRIMARY KEY AUTOINCREMENT,
+                      Equipment TEXT NOT NULL,
+                      UserID TEXT,
+                      FOREIGN KEY (UserID) REFERENCES User(UserID)
+                  );
 
-                CREATE TABLE IF NOT EXISTS ExerciseAvailableEquipment (
-                    ExerciseAvailableEquipmentID INTEGER PRIMARY KEY AUTOINCREMENT,
-                    Equipment TEXT NOT NULL,
-                    ExerciseID INTEGER,
-                    FOREIGN KEY (ExerciseID) REFERENCES Exercise(ExerciseID)
-                );
+                  CREATE TABLE IF NOT EXISTS ExerciseAvailableEquipment (
+                      ExerciseAvailableEquipmentID INTEGER PRIMARY KEY AUTOINCREMENT,
+                      Equipment TEXT NOT NULL,
+                      ExerciseID INTEGER,
+                      FOREIGN KEY (ExerciseID) REFERENCES Exercise(ExerciseID)
+                  );
 
-                CREATE TABLE IF NOT EXISTS UserSetTargets (
-                    UserSetTargetsID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,,
-                    UserID NOT NULL TEXT,
-                    FOREIGN KEY (UserID) REFERENCES User(UserID),
-                    ExerciseID INTEGER NOT NULL,
-                    FOREIGN KEY (ExerciseID) REFERENCES Exercise(ExerciseID)
-                    Reps INTEGER NOT NULL CHECK (Reps > 0),
-                    Weight REAL NOT NULL CHECK (Weight > 0),
-                    Order INTEGER NOT NULL CHECK (Order > 0),
-                );
+                  CREATE TABLE IF NOT EXISTS UserSetTargets (
+                      UserSetTargetsID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                      UserID TEXT NOT NULL,
+                      ExerciseID INTEGER NOT NULL,
+                      Reps INTEGER NOT NULL CHECK (Reps > 0),
+                      Weight REAL NOT NULL CHECK (Weight > 0),
+                      [Order] INTEGER NOT NULL CHECK ([Order] > 0), -- Wrapped in brackets because ORDER is a reserved keyword
+                      FOREIGN KEY (UserID) REFERENCES User(UserID), -- Moved to the bottom
+                      FOREIGN KEY (ExerciseID) REFERENCES Exercise(ExerciseID) -- Moved to the bottom
+                  );
 
-                CREATE TABLE IF NOT EXISTS UserTimedTargets (
-                    UserSetTargetsID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,,
-                    UserID NOT NULL TEXT,
-                    FOREIGN KEY (UserID) REFERENCES User(UserID),
-                    ExerciseID NOT NULL INTEGER,
-                    FOREIGN KEY (ExerciseID) REFERENCES Exercise(ExerciseID)
-                    Duration INTEGER NOT NULL CHECK (Duration > 0),
-                    Weight REAL NOT NULL CHECK (Weight > 0),
-                    Speed REAL CHECK (Weight > 0),
-                );
-                ";
+                  CREATE TABLE IF NOT EXISTS UserTimedTargets (
+                      UserTimedTargetsID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                      UserID TEXT NOT NULL,
+                      ExerciseID INTEGER NOT NULL,
+                      Duration INTEGER NOT NULL CHECK (Duration > 0),
+                      Weight REAL NOT NULL CHECK (Weight > 0),
+                      Speed REAL CHECK (Speed > 0),
+                      FOREIGN KEY (UserID) REFERENCES User(UserID), -- Moved to the bottom
+                      FOREIGN KEY (ExerciseID) REFERENCES Exercise(ExerciseID) -- Moved to the bottom
+                  );
+                  ";
+
 
                 using (var command = new SqliteCommand(CreateTables, connection))
                 {
@@ -167,7 +168,7 @@ namespace NEA
         //Retrieves an array of elements of data within a field for all records with a specific attribute
         private string[] GetMultiValuesInFieldFromKey(string table, string pkFieldName, string keyAttribute, string field)
         {
-            List<string> Cells = new List<string>();
+            LinkedList cells = new LinkedList();
 
             using (var connection = new SqliteConnection(connectionString))
             {
@@ -189,7 +190,7 @@ namespace NEA
                     {
                         while (reader.Read())
                         {
-                            Cells.Add(reader[table].ToString());
+                             cells.Append(reader[table].ToString());
                         }
                     }
                 }
@@ -438,10 +439,18 @@ namespace NEA
                 }
             }
         }
-        public string GetTargetsForUserSetExercise(string UserID, string ExerciseID)
+        public string GetTargetsForUserSets(string UserID, string ExerciseID)
         {
             string PK = GetKeyFromTwoFields("UserSetTargets", "UserSetTargetsID", "UserID", UserID, "ExerciseID", ExerciseID);
-            string[] repetitions = GetMultiValuesInFieldFromKey("Exercise", "ExerciseID", ExerciseID, "ExerciseDetails");
+            string[] repetitions = GetMultiValuesInFieldFromKey("UserSetTargets", "UserSetTargetsID", PK, "reps");
+            string[] weight = GetMultiValuesInFieldFromKey("UserSetTargets", "UserSetTargetsID", PK, "reps");
+            return "";
+        }
+
+        public string GetTargetsForUserTimedExercise(string UserID, string ExerciseID)
+        {
+            string PK = GetKeyFromTwoFields("UserSetTargets", "UserSetTargetsID", "UserID", UserID, "ExerciseID", ExerciseID);
+            string[] repetitions = GetMultiValuesInFieldFromKey("UserSetTargets", "UserSetTargetsID", PK, "reps");
             return "";
         }
 
