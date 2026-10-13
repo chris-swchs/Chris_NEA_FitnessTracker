@@ -11,6 +11,8 @@ using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
 using System.Xml.Linq;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
+using NEA.Models.LinkedLists;
+using NEA.Models.Entities;
 
 namespace NEA
 {
@@ -439,12 +441,19 @@ namespace NEA
                 }
             }
         }
-        public string GetTargetsForUserSets(string UserID, string ExerciseID)
+        public Set[] GetTargetsForUserSets(string UserID, string ExerciseID)
         {
             string PK = GetKeyFromTwoFields("UserSetTargets", "UserSetTargetsID", "UserID", UserID, "ExerciseID", ExerciseID);
-            string[] repetitions = GetMultiValuesInFieldFromKey("UserSetTargets", "UserSetTargetsID", PK, "reps");
-            string[] weight = GetMultiValuesInFieldFromKey("UserSetTargets", "UserSetTargetsID", PK, "reps");
-            return "";
+            int[] repetitions = GetMultiValuesInFieldFromKey("UserSetTargets", "UserSetTargetsID", PK, "reps");
+            float[] weight = GetMultiValuesInFieldFromKey("UserSetTargets", "UserSetTargetsID", PK, "reps");
+
+            Set[] Sets = new Set[repetitions.Length];
+            for (int i = 0; i < repetitions.Length; i++)
+            {
+                Set set = new Set(weight[i], repetitions[i]);
+                Sets[i] = set;
+            }
+            return Sets;
         }
 
         public string GetTargetsForUserTimedExercise(string UserID, string ExerciseID)
