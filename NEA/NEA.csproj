@@ -103,7 +103,9 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\Entities\Exercise.cs" />
+    <Compile Include="Models\Entities\RepBasedExercise.cs" />
     <Compile Include="Models\Entities\Set.cs" />
+    <Compile Include="Models\Entities\TimedExercise.cs" />
     <Compile Include="Models\LinkedLists\LinkedList.cs" />
     <Compile Include="Models\LinkedLists\Node.cs" />
     <Compile Include="Program.cs" />

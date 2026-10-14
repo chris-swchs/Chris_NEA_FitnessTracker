@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -67,6 +68,36 @@ namespace NEA.Models.LinkedLists
 
             // Case 2: Index is larger than the number of nodes in the list
             throw new ArgumentOutOfRangeException(nameof(index), "Index is out of range of the list.");
+        }
+
+        // Returns length of the linked list - number of elements
+        public int GetLength()
+        {
+            Node current = head;
+            int counter = 0;
+
+            while (current != null)
+            {
+                current = current.Next; // Move to the next node
+                counter++;
+            }
+            return counter;
+        }
+
+        public string[] ToArray()
+        {
+            Node current = head;
+            int counter = 0;
+
+            string[] linkedListArray = new string[this.GetLength()];
+
+            while (current != null)
+            {
+                linkedListArray[counter] = current.Data;
+                current = current.Next; // Move to the next node
+                counter++;
+            }
+            return linkedListArray; 
         }
 
         // Print the full list layout

@@ -20,6 +20,7 @@ namespace NEA
     // REMINDER:
     // MAKE GET GetUserAvailableEquipment() AND GetExerciseAvailableEquipment() RETURN A LIST OF DATA WITH THE ENUMERATION TYPE Equipment
     //Give GetMultiValuesInFieldFromKey() a more suitable name
+    // FIX TABLE NAMES
 
     public class DatabaseManager
     {
@@ -66,13 +67,14 @@ namespace NEA
                       FOREIGN KEY (ExerciseID) REFERENCES Exercise(ExerciseID)
                   );
 
-                  CREATE TABLE IF NOT EXISTS UserSetTargets (
+                  CREATE TABLE IF NOT EXISTS UserRepBasedSetTargets (
                       UserSetTargetsID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
                       UserID TEXT NOT NULL,
                       ExerciseID INTEGER NOT NULL,
                       Reps INTEGER NOT NULL CHECK (Reps > 0),
                       Weight REAL NOT NULL CHECK (Weight > 0),
                       [Order] INTEGER NOT NULL CHECK ([Order] > 0), -- Wrapped in brackets because ORDER is a reserved keyword
+                      RestDuration REAL CHECK (RestDuration > 0)
                       FOREIGN KEY (UserID) REFERENCES User(UserID), -- Moved to the bottom
                       FOREIGN KEY (ExerciseID) REFERENCES Exercise(ExerciseID) -- Moved to the bottom
                   );
@@ -84,6 +86,7 @@ namespace NEA
                       Duration INTEGER NOT NULL CHECK (Duration > 0),
                       Weight REAL NOT NULL CHECK (Weight > 0),
                       Speed REAL CHECK (Speed > 0),
+                      PostExerciseRestDuraiton REAL CHECK (PostExerciseRestDuration > 0)
                       FOREIGN KEY (UserID) REFERENCES User(UserID), -- Moved to the bottom
                       FOREIGN KEY (ExerciseID) REFERENCES Exercise(ExerciseID) -- Moved to the bottom
                   );
@@ -196,7 +199,7 @@ namespace NEA
                         }
                     }
                 }
-                return Cells.ToArray();
+                return cells.ToArray();
             }
         }
 
@@ -397,7 +400,7 @@ namespace NEA
                 connection.Open();
 
                 string sql = @"
-                INSERT INTO UserTimedTargets
+                INSERT INTO UserRepBasedSetTargets
                 (UserID, ExerciseID, Reps, Weight, Order)
                 VALUES
                 (@UserID, @ExerciseID, @Reps, @Weight, @Order);";
@@ -443,14 +446,15 @@ namespace NEA
         }
         public Set[] GetTargetsForUserSets(string UserID, string ExerciseID)
         {
-            string PK = GetKeyFromTwoFields("UserSetTargets", "UserSetTargetsID", "UserID", UserID, "ExerciseID", ExerciseID);
-            int[] repetitions = GetMultiValuesInFieldFromKey("UserSetTargets", "UserSetTargetsID", PK, "reps");
-            float[] weight = GetMultiValuesInFieldFromKey("UserSetTargets", "UserSetTargetsID", PK, "reps");
+            string PK = GetKeyFromTwoFields("UserRepBasedSetTargets", "UserRepBasedSetTargetsID", "UserID", UserID, "ExerciseID", ExerciseID);
+            int[] repetitions = Array.ConvertAll(GetMultiValuesInFieldFromKey("UserRepBasedSetTargets", "UserRepBasedSetTargetsID", PK, "Reps"), int.Parse);
+            float[] weight = Array.ConvertAll(GetMultiValuesInFieldFromKey("UserRepBasedSetTargets", "UserRepBasedSetTargetsID", PK, "Weight"), float.Parse);
+            float[] restDurations = Array.ConvertAll(GetMultiValuesInFieldFromKey("UserRepBasedSetTargets", "UserRepBasedSetTargetsID", PK, "RestDuration"), float.Parse);
 
             Set[] Sets = new Set[repetitions.Length];
             for (int i = 0; i < repetitions.Length; i++)
             {
-                Set set = new Set(weight[i], repetitions[i]);
+                Set set = new Set(weight[i], repetitions[i], restDurations[i]);
                 Sets[i] = set;
             }
             return Sets;
@@ -458,9 +462,19 @@ namespace NEA
 
         public string GetTargetsForUserTimedExercise(string UserID, string ExerciseID)
         {
-            string PK = GetKeyFromTwoFields("UserSetTargets", "UserSetTargetsID", "UserID", UserID, "ExerciseID", ExerciseID);
-            string[] repetitions = GetMultiValuesInFieldFromKey("UserSetTargets", "UserSetTargetsID", PK, "reps");
-            return "";
+            string PK = GetKeyFromTwoFields("UserTimedTargets", "UserTimedTargetsID", "UserID", UserID, "ExerciseID", ExerciseID);
+            float weight = GetFieldFromKey("UserTimedTargets", "UserTimedTargetsID", PK, "Weight")
+            float speed = GetFieldFromKey("UserTimedTargets", "UserTimedTargetsID", PK, "Speed")
+            float duration = GetFieldFromKey("UserTimedTargets", "UserTimedTargetsID", PK, "Duration")
+            float postExerciseRestDuration = GetFieldFromKey("UserTimedTargets", "UserTimedTargetsID", PK, "PostExerciseRestDuration");
+
+            string exerciseName = GetExerciseName(ExerciseID);
+            string exerciseDescription = GetExerciseDetails(ExerciseID);
+            string exerciseTargetMuscle = GetExerciseTargetMuscle(ExerciseID);
+            string exerciseType = GetExerciseType(ExerciseID);
+
+            TimedExercise timedExercise = new TimedExercise(exerciseName, exerciseDescription, exerciseType, exerciseTargetMuscle,); 
+            return ;
         }
 
     }

@@ -10,11 +10,13 @@ namespace NEA.Models.Entities
     {
         public float Weight { get; set; }
         public int Reps { get; set; }
-        private bool Completed { get; set; } = false;
-        public Set(float weight, int reps)
+        public float RestDuration { get; set; }
+        public bool Completed { get; private set; }
+        public Set(float weight, int reps, float restDuration)
         {
             Weight = weight;
             Reps = reps;
+            RestDuration = restDuration;
         }
 
         public void MarkCompleted()
