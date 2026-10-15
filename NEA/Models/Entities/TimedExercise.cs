@@ -8,35 +8,25 @@ namespace NEA.Models.Entities
 {
     public class TimedExercise : Exercise
     {
-        public Set[] Sets { get; private set; }
-
-        public TimedExercise(string exerciseName, string exerciseDescription, ExerciseType exerciseType, MuscleGroup targetMuscle, Set[] sets)
+        public float Duration { get; set; }
+        public float PostWorkoutDuration { get; set; }
+        public float Weight {  get; set; }
+        public float Speed { get; set; }
+        public TimedExercise(string exerciseName, string exerciseDescription, ExerciseType exerciseType, MuscleGroup targetMuscle, float postWorkoutDuration,  float  weight, float speed, float duration)
             : base(exerciseName, exerciseDescription, exerciseType, targetMuscle)
         {
-            Sets = sets;
+            PostWorkoutDuration = postWorkoutDuration;
+            Duration = duration;
+            Weight = weight;    
+            Speed = speed;
         }
-
-        public int GetCompletedSetCount()
-        {
-            int completedCount = 0;
-            foreach (Set set in Sets)
-            {
-                if (set.Completed == true)
-                {
-                    completedCount++;
-                }
             }
             return completedCount;
         }
 
-        public int GetEstimatedDuration()
+        public override float GetEstimatedDuration()
         {
-            float duration = 0;
-            foreach (Set set in Sets)
-            {
-                set.Reps
-            }
-            return completedCount;
+            return Duration + PostWorkoutDuration;
         }
     }
 }

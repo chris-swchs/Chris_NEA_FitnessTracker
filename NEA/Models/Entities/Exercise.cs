@@ -27,5 +27,10 @@ namespace NEA.Models.Entities
         {
             Completed = true;
         }
+
+        public virtual float GetEstimatedDuration()
+        {
+            return 0;
+        }
     }
 }

@@ -19,7 +19,7 @@ namespace NEA.Models.Entities
         public int GetCompletedSetCount()
         {
             int completedCount = 0;
-            foreach (Set set in Sets) 
+            foreach (Set set in Sets)
             {
                 if (set.Completed == true)
                 {
@@ -27,6 +27,16 @@ namespace NEA.Models.Entities
                 }
             }
             return completedCount;
+        }
+
+        public override float GetEstimatedDuration()
+        {
+            float duration = 0;
+            foreach (Set set in Sets)
+            {
+                duration = duration + (set.Reps * 1) + (set.RestDuration);
+            }
+            return duration;
         }
     }
 }
