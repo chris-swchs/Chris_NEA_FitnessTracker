@@ -12,6 +12,7 @@ namespace NEA.Models.Entities
         public string ExerciseDescription { get; set; }
         ExerciseType ExerciseType { get; set; }
         MuscleGroup TargetMuscle {  get; set; }
+        public bool Completed { get; private set; }
 
         public Exercise(string exerciseName, string exerciseDescription, ExerciseType exerciseType, MuscleGroup targetMuscle)
         {
@@ -21,6 +22,10 @@ namespace NEA.Models.Entities
             TargetMuscle = targetMuscle;
         }
 
-        private bool Completed;
+
+        public void MarkCompleted()
+        {
+            Completed = true;
+        }
     }
 }

@@ -20,6 +20,7 @@ namespace NEA
     // REMINDER:
     // MAKE GET GetUserAvailableEquipment() AND GetExerciseAvailableEquipment() RETURN A LIST OF DATA WITH THE ENUMERATION TYPE Equipment
     //Give GetMultiValuesInFieldFromKey() a more suitable name
+    // FIX TABLE NAMES
 
     public class DatabaseManager
     {
@@ -196,7 +197,7 @@ namespace NEA
                         }
                     }
                 }
-                return Cells.ToArray();
+                return cells.ToArray();
             }
         }
 
@@ -444,8 +445,8 @@ namespace NEA
         public Set[] GetTargetsForUserSets(string UserID, string ExerciseID)
         {
             string PK = GetKeyFromTwoFields("UserSetTargets", "UserSetTargetsID", "UserID", UserID, "ExerciseID", ExerciseID);
-            int[] repetitions = GetMultiValuesInFieldFromKey("UserSetTargets", "UserSetTargetsID", PK, "reps");
-            float[] weight = GetMultiValuesInFieldFromKey("UserSetTargets", "UserSetTargetsID", PK, "reps");
+            int[] repetitions = Array.ConvertAll(GetMultiValuesInFieldFromKey("UserSetTargets", "UserSetTargetsID", PK, "reps"), int.Parse);
+            float[] weight = Array.ConvertAll(GetMultiValuesInFieldFromKey("UserSetTargets", "UserSetTargetsID", PK, "reps"), float.Parse);
 
             Set[] Sets = new Set[repetitions.Length];
             for (int i = 0; i < repetitions.Length; i++)
