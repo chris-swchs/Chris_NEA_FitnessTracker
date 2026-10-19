@@ -106,10 +106,12 @@
     <Compile Include="Models\Entities\RepBasedExercise.cs" />
     <Compile Include="Models\Entities\Set.cs" />
     <Compile Include="Models\Entities\TimedExercise.cs" />
+    <Compile Include="Models\Entities\User.cs" />
     <Compile Include="Models\LinkedLists\LinkedList.cs" />
     <Compile Include="Models\LinkedLists\Node.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\WorkoutTypeSelection.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>

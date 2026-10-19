@@ -56,4 +56,15 @@ namespace NEA
         Dumbell,
         Barbell
     }
+
+    public enum Goals
+    {
+        Strength,
+        MuscleGrowth,
+        CardiovascularFitness,
+        GeneralFitness,
+        MuscularEndurance,
+        Power,
+        Mobility
+    }
 }

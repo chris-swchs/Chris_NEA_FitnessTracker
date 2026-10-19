@@ -103,7 +103,7 @@ namespace NEA
         // GENERALISED DATABASE FUNCTIONS
 
         //Retrieves an element of data within a field for a record inside of a table
-        private string GetFieldFromKey(string table, string pkFieldName, string pk, string field)
+        private T GetFieldFromKey<T>(string table, string pkFieldName, string pk, string field)
         {
             using (var connection = new SqliteConnection(connectionString))
             {
@@ -124,12 +124,12 @@ namespace NEA
 
                     object result = command.ExecuteScalar();
 
-                    if (result != null)
+                    if (result != null && result != DBNull.Value)
                     {
-                        return result.ToString();
+                        return (T)Convert.ChangeType(result, typeof(T));
                     }
 
-                    return null;
+                    return default(T);
                 }
             }
         }
@@ -262,22 +262,22 @@ namespace NEA
 
         public string GetExerciseName(string ExerciseID)
         {
-            return GetFieldFromKey("Exercise", "ExerciseID", ExerciseID, "Name");
+            return GetFieldFromKey<string>("Exercise", "ExerciseID", ExerciseID, "Name");
         } 
 
         public string GetExerciseType(string ExerciseID)
         {
-            return GetFieldFromKey("Exercise", "ExerciseID", ExerciseID, "ExerciseType");
+            return GetFieldFromKey<string>("Exercise", "ExerciseID", ExerciseID, "ExerciseType");
         }
 
         public string GetExerciseTargetMuscle(string ExerciseID)
         {
-            return GetFieldFromKey("Exercise", "ExerciseID", ExerciseID, "TargetMuscle");
+            return GetFieldFromKey<string>("Exercise", "ExerciseID", ExerciseID, "TargetMuscle");
         }
 
         public string GetExerciseDetails(string ExerciseID)
         {
-            return GetFieldFromKey("Exercise", "ExerciseID", ExerciseID, "ExerciseDetails");
+            return GetFieldFromKey<string>("Exercise", "ExerciseID", ExerciseID, "ExerciseDetails");
         }
 
 
@@ -463,17 +463,18 @@ namespace NEA
         public string GetTargetsForUserTimedExercise(string UserID, string ExerciseID)
         {
             string PK = GetKeyFromTwoFields("UserTimedTargets", "UserTimedTargetsID", "UserID", UserID, "ExerciseID", ExerciseID);
-            float weight = GetFieldFromKey("UserTimedTargets", "UserTimedTargetsID", PK, "Weight")
-            float speed = GetFieldFromKey("UserTimedTargets", "UserTimedTargetsID", PK, "Speed")
-            float duration = GetFieldFromKey("UserTimedTargets", "UserTimedTargetsID", PK, "Duration")
-            float postExerciseRestDuration = GetFieldFromKey("UserTimedTargets", "UserTimedTargetsID", PK, "PostExerciseRestDuration");
+            float weight = GetFieldFromKey<float>("UserTimedTargets", "UserTimedTargetsID", PK, "Weight");
+            float speed = GetFieldFromKey<float>("UserTimedTargets", "UserTimedTargetsID", PK, "Speed");
+            float duration = GetFieldFromKey<float>("UserTimedTargets", "UserTimedTargetsID", PK, "Duration");
+            float postExerciseRestDuration = GetFieldFromKey<float>("UserTimedTargets", "UserTimedTargetsID", PK, "PostExerciseRestDuration");
 
             string exerciseName = GetExerciseName(ExerciseID);
             string exerciseDescription = GetExerciseDetails(ExerciseID);
             string exerciseTargetMuscle = GetExerciseTargetMuscle(ExerciseID);
             string exerciseType = GetExerciseType(ExerciseID);
 
-            TimedExercise timedExercise = new TimedExercise(exerciseName, exerciseDescription, exerciseType, exerciseTargetMuscle,); 
+            TimedExercise timedExercise = new TimedExercise(exerciseName, exerciseDescription, exerciseType, exerciseTargetMuscle,
+                postExerciseRestDuration, weight, speed, duration); 
             return ;
         }
 
