@@ -105,6 +105,7 @@
     <Compile Include="Models\Entities\Exercise.cs" />
     <Compile Include="Models\Entities\RepBasedExercise.cs" />
     <Compile Include="Models\Entities\Set.cs" />
+    <Compile Include="Models\Entities\UserSettings.cs" />
     <Compile Include="Models\Entities\TimedExercise.cs" />
     <Compile Include="Models\Entities\User.cs" />
     <Compile Include="Models\LinkedLists\LinkedList.cs" />

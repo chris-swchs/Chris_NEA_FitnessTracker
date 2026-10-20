@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NEA.Services
 {
@@ -10,11 +6,27 @@ namespace NEA.Services
     {
         public void RunAlgorithm()
         {
-            foreach (WorkoutType workoutType in Enum.GetValues(typeof(WorkoutType))
+            // for loop temporary - is meant to loop through each available workout slot
+            for (int i = 0; i < 10; i++)
             {
-                int WorkoutTypeIndex = (int)workoutType;
-                int[] Scores = new int[Enum.GetValues(typeof(WorkoutType)).Length];
+                double[] Scores = new double[Enum.GetValues(typeof(WorkoutType)).Length];
+                int WorkoutTypeIndex = 0;
+                foreach (WorkoutType workoutType in Enum.GetValues(typeof(WorkoutType)))
+                {
+                     WorkoutTypeIndex = (int)workoutType;
+
+                    double score = CalculateScore();
+                    Scores[WorkoutTypeIndex] = score;
+                    WorkoutTypeIndex++;
+
+
+                }
             }
+        }
+
+        private double CalculateScore()
+        {
+            return 5.0;
         }
     }
 }

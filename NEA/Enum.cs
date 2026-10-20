@@ -57,7 +57,7 @@ namespace NEA
         Barbell
     }
 
-    public enum Goals
+    public enum Goal
     {
         Strength,
         MuscleGrowth,
@@ -66,5 +66,25 @@ namespace NEA
         MuscularEndurance,
         Power,
         Mobility
+    }
+
+    public enum ExperienceLevel
+    {
+        Beginner,
+        Intermediate,
+        Advance
+    }
+
+    public enum Frequency
+    {
+        Low,
+        Moderate,
+        High
+    }
+    public enum Difficulty
+    {
+        Easy,
+        Moderate,
+        Hard
     }
 }
