@@ -32,6 +32,17 @@ namespace NEA
         Calves
     }
 
+    public enum MainMuscleGroup
+    {
+        Chest,
+        Shoulders,
+        Biceps,
+        Triceps,
+        Forearms,
+        Back,
+        Legs
+    }
+
     //Contains list of the possible sets of exercise types
     public enum ExerciseType
     {

@@ -20,9 +20,6 @@ namespace NEA.Models.Entities
             Weight = weight;    
             Speed = speed;
         }
-            }
-            return completedCount;
-        }
 
         public override float GetEstimatedDuration()
         {

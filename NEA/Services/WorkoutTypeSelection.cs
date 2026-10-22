@@ -1,10 +1,11 @@
-﻿using System;
+﻿using NEA.Models.Entities;
+using System;
 
 namespace NEA.Services
 {
-    public class WorkoutTypeSelection
+    public static class WorkoutTypeSelection  
     {
-        public void RunAlgorithm()
+        public static void RunAlgorithm(UserSettings userSettings)
         {
             // for loop temporary - is meant to loop through each available workout slot
             for (int i = 0; i < 10; i++)
@@ -15,18 +16,23 @@ namespace NEA.Services
                 {
                      WorkoutTypeIndex = (int)workoutType;
 
-                    double score = CalculateScore();
+                    double score = CalculateWorkoutTypeScore(workoutType, userSettings);
                     Scores[WorkoutTypeIndex] = score;
                     WorkoutTypeIndex++;
-
-
                 }
             }
         }
 
-        private double CalculateScore()
+        private static double CalculateWorkoutTypeScore(WorkoutType workoutType, UserSettings userSettings)
         {
-            return 5.0;
+            // Takes into acount 4 settings, prmary goal, sconday goal, muscle priority
+            double PrimaryGoalCompatibility = CompatibilityDefinitions.WorkoutType_Goal.Get(workoutType, userSettings.PrimaryGoal);
+            double SecondaryGoalCompatibility = CompatibilityDefinitions.WorkoutType_Goal.Get(workoutType, userSettings.SecondaryGoal);
+            double MuscleGroupCompatility = CompatibilityDefinitions.WorkoutType_MuscleGroup.Get(workoutType, userSettings.MainMuscleGroupPriority);
+            double CardioPreferenceCompatibility = CompatibilityDefinitions.WorkoutType_CardioPreference.Get(workoutType, userSettings.CardioPreference);
+
+            double sum = MathOps.GetSum(PrimaryGoalCompatibility, SecondaryGoalCompatibility, MuscleGroupCompatility, CardioPreferenceCompatibility);
+            return sum / 4;
         }
     }
 }

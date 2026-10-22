@@ -19,6 +19,6 @@ namespace NEA.Models.Entities
         public float CompoundIsolationInterpolation { get; set; }
         public Difficulty PreferredWorkoutDifficulty { get; set; }
         public Frequency CardioPreference { get; set; }
-        public MuscleGroup MainMuscleGroupPriority { get; set; }
+        public MainMuscleGroup MainMuscleGroupPriority { get; set; }
     }
 }
