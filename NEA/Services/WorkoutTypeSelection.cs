@@ -8,18 +8,23 @@ namespace NEA.Services
         public static void RunAlgorithm(UserSettings userSettings)
         {
             // for loop temporary - is meant to loop through each available workout slot
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 4; i++)
             {
                 double[] Scores = new double[Enum.GetValues(typeof(WorkoutType)).Length];
-                int WorkoutTypeIndex = 0;
+                double HighestScore = -1000;
+                WorkoutType HighestScoreWorkoutType;
                 foreach (WorkoutType workoutType in Enum.GetValues(typeof(WorkoutType)))
                 {
-                     WorkoutTypeIndex = (int)workoutType;
 
                     double score = CalculateWorkoutTypeScore(workoutType, userSettings);
-                    Scores[WorkoutTypeIndex] = score;
-                    WorkoutTypeIndex++;
+                    
+                    if (score > HighestScore)
+
+                    {
+                        HighestScoreWorkoutType = workoutType;
+                    }
                 }
+
             }
         }
 
@@ -31,8 +36,18 @@ namespace NEA.Services
             double MuscleGroupCompatility = CompatibilityDefinitions.WorkoutType_MuscleGroup.Get(workoutType, userSettings.MainMuscleGroupPriority);
             double CardioPreferenceCompatibility = CompatibilityDefinitions.WorkoutType_CardioPreference.Get(workoutType, userSettings.CardioPreference);
 
-            double sum = MathOps.GetSum(PrimaryGoalCompatibility, SecondaryGoalCompatibility, MuscleGroupCompatility, CardioPreferenceCompatibility);
-            return sum / 4;
+            int DaysSinceLastUsed = 0;
+
+            Func<int?, double> CalculateRecenency = days =>
+                days.HasValue
+                    ? Math.Exp(-2 * days.Value)
+                    : 0.0;
+
+            Func<double, double, double, double, double, double> CalculateScore = (Gp, Gs, M, C, R) =>
+                (4.0 * Gp) + (4.0 * Gp) + (3.0 * M) + (2.0 * C) - (4.0 * R);
+                
+
+            return CalculateScore(PrimaryGoalCompatibility, SecondaryGoalCompatibility, MuscleGroupCompatility, CardioPreferenceCompatibility, CalculateRecenency(DaysSinceLastUsed);
         }
     }
 }
