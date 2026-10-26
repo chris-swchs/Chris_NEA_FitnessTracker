@@ -9,7 +9,7 @@ using NEA.Models.LinkedLists;
 namespace NEA
 {
 
-    internal static class Program
+     class Program
     {
         /// <summary>
         /// The main entry point for the application.
@@ -17,8 +17,8 @@ namespace NEA
         [STAThread]
         static void Main()
         {
-            DatabaseManager db = new DatabaseManager();
-            db.InitializeDatabase();
+            DatabaseManager DB = new DatabaseManager();
+            DB.InitializeDatabase();
 
             LinkedList list = new LinkedList();
 
@@ -31,7 +31,7 @@ namespace NEA
             list.PrintList();
 
             //Adding all the exercises
-            db.AddExerciseRecord("flat Bench Press",
+            DB.AddExerciseRecord("flat Bench Press",
                 ExerciseType.Strength,
                 MuscleGroup.LowerChest,
                 "Push the bar up and down while laying flat on a flat-adjusted bench");

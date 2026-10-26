@@ -1,5 +1,6 @@
 ﻿using NEA.Models.Entities;
 using System;
+using System.Windows.Forms;
 
 namespace NEA.Services
 {
@@ -27,7 +28,6 @@ namespace NEA.Services
 
             }
         }
-
         private static double CalculateWorkoutTypeScore(WorkoutType workoutType, UserSettings userSettings)
         {
             // Takes into acount 4 settings, prmary goal, sconday goal, muscle priority
@@ -35,7 +35,8 @@ namespace NEA.Services
             double SecondaryGoalCompatibility = CompatibilityDefinitions.WorkoutType_Goal.Get(workoutType, userSettings.SecondaryGoal);
             double MuscleGroupCompatility = CompatibilityDefinitions.WorkoutType_MuscleGroup.Get(workoutType, userSettings.MainMuscleGroupPriority);
             double CardioPreferenceCompatibility = CompatibilityDefinitions.WorkoutType_CardioPreference.Get(workoutType, userSettings.CardioPreference);
-
+            
+            // Need a function which can check when the user last did a workout with a specific workout type
             int DaysSinceLastUsed = 0;
 
             Func<int?, double> CalculateRecenency = days =>

@@ -30,7 +30,7 @@ namespace NEA
         private const string DbFileName = "nea_database.db";
         private readonly string connectionString = $"Data Source={DbFileName}";
 
-    public void InitializeDatabase()
+        public void InitializeDatabase()
         {
             // Creates the database file automatically if it doesn't exist
             using (var connection = new SqliteConnection(connectionString))
@@ -78,6 +78,34 @@ namespace NEA
                       FOREIGN KEY (UserID) REFERENCES User(UserID), 
                   );
 
+                  CREATE TABLE IF NOT EXISTS WorkoutRepBasedSet (
+                      WorkoutRepBasedSetID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                      WorkoutID TEXT NOT NULL,
+                      ExerciseID INTEGER NOT NULL
+                      TargetWeight REAL NOT NULL
+                      TargetReps INTEGER NOT NULL
+                      ExerciseOrder INTEGER  NOT NULL
+                      RestDuration INTEGER NOT NULL
+                      Completed INTEGER NOT NULL CHECK (IsActive IN (0, 1))
+                      FOREIGN KEY (WorkoutID) REFERENCES Workout(WorkoutID), 
+                      FOREIGN KEY (ExerciseID) REFERENCES Exercise(ExerciseID), 
+                  );
+
+                  CREATE TABLE IF NOT EXISTS WorkoutTimedExercise (
+                      WorkoutTimedExerciseID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                      WorkoutID TEXT NOT NULL,
+                      ExerciseID INTEGER NOT NULL
+                      TargetWeight REAL NOT NULL
+                      TargetSpeed REAL NOT NULL
+                      Duration INTEGER NOT NULL
+                      ExerciseOrder INTEGER  NOT NULL
+                      RestDuration INTEGER NOT NULL
+                      Completed INTEGER NOT NULL CHECK (IsActive IN (0, 1))
+                      FOREIGN KEY (WorkoutID) REFERENCES Workout(WorkoutID), 
+                      FOREIGN KEY (ExerciseID) REFERENCES Exercise(ExerciseID), 
+                  );
+                
+
                   CREATE TABLE IF NOT EXISTS UserRepBasedSetTargets (
                       UserSetTargetsID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
                       UserID TEXT NOT NULL,
@@ -108,6 +136,12 @@ namespace NEA
                 }
             }
         }
+        //UTILITY FUNCTIONS
+        private DateTime StringToDate(object String)
+        {
+            return DateTime.ParseExact(String.ToString(), "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
+        }
+
 
         // GENERALISED DATABASE FUNCTIONS
 
@@ -154,7 +188,7 @@ namespace NEA
                 string sql = @"
                     SELECT @pkFieldName
                     FROM @table
-                    WHERE @field1Name = @field1;
+                    WHERE @field1Name = @field1
                     AND @field2name = @field2";
 
                 using (var command = new SqliteCommand(sql, connection))
@@ -204,7 +238,7 @@ namespace NEA
                     {
                         while (reader.Read())
                         {
-                             cells.Append(reader[table].ToString());
+                            cells.Append(reader[table].ToString());
                         }
                     }
                 }
@@ -272,7 +306,7 @@ namespace NEA
         public string GetExerciseName(string ExerciseID)
         {
             return GetFieldFromKey<string>("Exercise", "ExerciseID", ExerciseID, "Name");
-        } 
+        }
 
         public string GetExerciseType(string ExerciseID)
         {
@@ -433,26 +467,19 @@ namespace NEA
         // I have decided not to have an update_set function as this will get too complicated considering there will be
         // multiple sets (records) within the table. Instead, all the set targets can be removed for an exercise, and new
         // ones can be added through AddUserSetTarget
-        public void RemoveUserSetTarget(string UserID, int ExerciseID, int Reps, float Weight, int Order)
+        public void RemoveUserSetTargets(string UserID, int ExerciseID, int Reps, float Weight, int Order)
         {
             using (var connection = new SqliteConnection(connectionString))
             {
                 connection.Open();
 
                 string sql = @"
-                INSERT INTO UserRepBasedSetTargets
-                (UserID, ExerciseID, Reps, Weight, Order)
-                VALUES
-                (@UserID, @ExerciseID, @Reps, @Weight, @Order);";
+                REMOVE FROM UserRepBasedSetTarget WHERE UserID = @UserID AND ExerciseID = @Exercise";
 
                 using (var command = new SqliteCommand(sql, connection))
                 {
                     command.Parameters.AddWithValue("@UserID", UserID);
                     command.Parameters.AddWithValue("@ExerciseID", ExerciseID);
-                    command.Parameters.AddWithValue("@Duration", Reps);
-                    command.Parameters.AddWithValue("@Weight", Weight);
-                    command.Parameters.AddWithValue("@Speed", Order);
-                    command.Parameters.AddWithValue("@Speed", Order);
 
                     command.ExecuteNonQuery();
                 }
@@ -500,7 +527,7 @@ namespace NEA
                 }
             }
         }
-        
+
         public void UpdateUserTimedTarget(string UserID, int ExerciseID, int Duration, float Weight, float Speed)
         {
             using (var connection = new SqliteConnection(connectionString))
@@ -541,12 +568,13 @@ namespace NEA
             string exerciseType = GetExerciseType(ExerciseID);
 
             TimedExercise timedExercise = new TimedExercise(exerciseName, exerciseDescription, exerciseType, exerciseTargetMuscle,
-                postExerciseRestDuration, weight, speed, duration); 
+                postExerciseRestDuration, weight, speed, duration);
 
             return timedExercise;
         }
 
         // WORKOUT METHODS
+
         public void AddWorkout(string UserID, DateTime Date, bool Completed, WorkoutType workoutType)
         {
             string sqlDateText = Date.ToString("yyyy-MM-DD HH:mm:ss", CultureInfo.InvariantCulture);
@@ -557,7 +585,7 @@ namespace NEA
 
                 string sql = @"
 
-                INSERT INTO UserTimedTargets
+                INSERT INTO Workout
                 (UserID, Date, Completed, WorkoutType)
                 VALUES
                  (@UserID, @Date, @Completed, @workoutType);";
@@ -573,6 +601,160 @@ namespace NEA
                 }
             }
         }
+
+        public DateTime? GetMostRecentTimedExerciseDate(string userID, Exercise exercise)
+        {
+            bool repBased = false;
+
+            if (exercise is RepBasedExercise)
+            {
+                repBased = true;
+            }
+
+            using (SqliteConnection connection =
+                new SqliteConnection(connectionString))
+            {
+                connection.Open();
+
+                string query = @"
+                SELECT MAX(w.Date)
+                FROM @TableName AS t
+                INNER JOIN Workout AS w
+                ON t.WorkoutID = w.WorkoutID
+                WHERE t.ExerciseID = @ExerciseID
+                AND w.UserID = @UserID
+                AND w.Completed = 1;";
+
+                using (SqliteCommand command =
+                    new SqliteCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@ExerciseID", exercise.ExerciseID);
+                    command.Parameters.AddWithValue("@UserID", userID);
+                    command.Parameters.AddWithValue("@TableName", repBased ? "UserRepBasedexercise" : "UserTimedExercise");
+
+                    object result = command.ExecuteScalar();
+
+                    if (result == null || result == DBNull.Value)
+                    {
+                        return null;
+                    }
+
+                    return StringToDate(result);
+                }
+            }
+        }
+
+        // USER-REP-BASED-SET CONJOINED WITH USER-TIMED-EXERCISE METHODS
+        public DateTime? GetMostRecentDateOfWorkouType(string userID, WorkoutType workoutType)
+        {
+            using (SqliteConnection connection =
+                new SqliteConnection(connectionString))
+            {
+                connection.Open();
+
+                string query = @"
+                SELECT MAX(Date)
+                FROM Workout
+                WHERE WorkoutType = @WorkoutType
+                AND UserID = @UserID
+                AND Completed = 1;";
+
+                using (SqliteCommand command =
+                    new SqliteCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@WorkoutType", workoutType.ToString());
+                    command.Parameters.AddWithValue("@UserID", userID);
+
+                    object result = command.ExecuteScalar();
+
+                    if (result == null || result == DBNull.Value)
+                    {
+                        return null;
+                    }
+
+                    return StringToDate(result);
+                }
+            }
+        }
+
+
+        // USER-REP-BASED-SET METHODS
+        public void AddRepBasedExerciseToWorkout(int workoutID, RepBasedExercise exercise, int exerciseOrder)
+        {
+            int ExerciseID = GetFieldFromKey<int>("Exericse", "Name", exercise.ExerciseName, "ExerciseID");
+            using (SqliteConnection connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
+
+                // Ensures all sets are inserted together, as a transaction ensures atomicity
+                using (SqliteTransaction transaction = connection.BeginTransaction())
+                {
+                    string query = @"
+                INSERT INTO WorkoutRepBasedSet
+                (WorkoutID, ExerciseID, TargetWeight, TargetReps, ExerciseOrder,  RestDuration, Completed) 
+                VALUES
+                (@WorkoutID, @ExerciseID, @TargetWeight, @TargetReps, @ExerciseOrder, @RestDuration, @Completed);";
+
+                    using (SqliteCommand command =
+                        new SqliteCommand(query, connection, transaction))
+                    {
+                        command.Parameters.AddWithValue("@WorkoutID", workoutID);
+                        command.Parameters.AddWithValue("@ExerciseID", ExerciseID);
+                        command.Parameters.AddWithValue("@ExerciseOrder", exerciseOrder);
+
+                        var weightParameter = command.Parameters.Add("@TargetWeight", SqliteType.Real);
+                        var repsParameter = command.Parameters.Add("@TargetReps", SqliteType.Integer);
+                        var restParameter = command.Parameters.Add("@RestDuration", SqliteType.Integer);
+                        var completedParameter = command.Parameters.Add("@Completed", SqliteType.Integer);
+
+                        foreach (Set set in exercise.Sets)
+                        {
+                            int Completed_Int = set.Completed ? 1 : 0;
+
+                            weightParameter.Value = set.Weight;
+                            repsParameter.Value = set.Reps;
+                            restParameter.Value = set.RestDuration;
+                            completedParameter.Value = Completed_Int;
+
+                            command.ExecuteNonQuery();
+                        }
+                    }
+
+                    transaction.Commit();
+                }
+            }
+        }
+
+        // USER-TIMED-EXERCISE METHODS
+        public void AddTimedExerciseToWorkout(int workoutID, TimedExercise exercise, int exerciseOrder)
+        {
+            int Completed_Int = exercise.Completed ? 1 : 0;
+            int ExerciseID = GetFieldFromKey<int>("Exericse", "Name", exercise.ExerciseName, "ExerciseID");
+            using (var connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
+
+                string sql = @"
+                INSERT INTO WorkoutTimedExercise
+                (WorkoutID, ExerciseID, TargetWeight, TargetSpeed, Duration, ExerciseOrder, RestDuration, Completed) 
+                VALUES
+                (@WorkoutID, @ExerciseID, @TargetWeight, @TargetSpeed, @Duration, @ExerciseOrder, @RestDuration, @Completed);";
+
+                using (var command = new SqliteCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("@WorkoutID", workoutID);
+                    command.Parameters.AddWithValue("@ExerciseID", ExerciseID);
+                    command.Parameters.AddWithValue("@TargetWeight", exercise.Weight);
+                    command.Parameters.AddWithValue("@TargetSpeed", exercise.Speed);
+                    command.Parameters.AddWithValue("@Duration", exercise.Duration);
+                    command.Parameters.AddWithValue("@ExerciseOrder", exerciseOrder);
+                    command.Parameters.AddWithValue("@RestDuration", exercise.RestDuration);
+                    command.Parameters.AddWithValue("@Completed", Completed_Int);
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
     }
 }
+
 
