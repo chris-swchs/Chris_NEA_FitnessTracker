@@ -73,34 +73,35 @@ namespace NEA
                       UserID TEXT NOT NULL,
                       Date TEXT NOT NULL CHECK (length(Date) = 10 AND 
                         Date GLOB '[0-3][0-9]:[0-1][0-9]:[0-9][0-9][0-9][0-9]')
-                      Completed INTEGER NOT NULL CHECK (IsActive IN (0, 1)),
+                      Completed INTEGER NOT NULL DEFAULT 0
+                        CHECK (Completed IN (0, 1)),
                       WorkoutType TEXT NOT NULL,
                       FOREIGN KEY (UserID) REFERENCES User(UserID), 
                   );
 
                   CREATE TABLE IF NOT EXISTS WorkoutRepBasedSet (
                       WorkoutRepBasedSetID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-                      WorkoutID TEXT NOT NULL,
-                      ExerciseID INTEGER NOT NULL
-                      TargetWeight REAL NOT NULL
-                      TargetReps INTEGER NOT NULL
-                      ExerciseOrder INTEGER  NOT NULL
-                      RestDuration INTEGER NOT NULL
-                      Completed INTEGER NOT NULL CHECK (IsActive IN (0, 1))
+                      WorkoutID INTEGER NOT NULL,
+                      ExerciseID INTEGER NOT NULL,
+                      TargetWeight REAL NOT NULL,
+                      TargetReps INTEGER NOT NULL ,
+                      ExerciseOrder INTEGER  NOT NULL ,
+                      RestDuration INTEGER NOT NUL,
+                      Completed INTEGER NOT NULL CHECK (Completed IN (0, 1)),
                       FOREIGN KEY (WorkoutID) REFERENCES Workout(WorkoutID), 
                       FOREIGN KEY (ExerciseID) REFERENCES Exercise(ExerciseID), 
                   );
 
                   CREATE TABLE IF NOT EXISTS WorkoutTimedExercise (
                       WorkoutTimedExerciseID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-                      WorkoutID TEXT NOT NULL,
-                      ExerciseID INTEGER NOT NULL
-                      TargetWeight REAL NOT NULL
-                      TargetSpeed REAL NOT NULL
-                      Duration INTEGER NOT NULL
-                      ExerciseOrder INTEGER  NOT NULL
-                      RestDuration INTEGER NOT NULL
-                      Completed INTEGER NOT NULL CHECK (IsActive IN (0, 1))
+                      WorkoutID INTEGER NOT NULL,
+                      ExerciseID INTEGER NOT NULL ,
+                      TargetWeight REAL NOT NULL,
+                      TargetSpeed REAL NOT NULL,
+                      Duration INTEGER NOT NULL ,
+                      ExerciseOrder INTEGER  NOT NULL ,
+                      RestDuration INTEGER NOT NULL,
+                      Completed INTEGER NOT NULL CHECK (Completed IN (0, 1)) ,
                       FOREIGN KEY (WorkoutID) REFERENCES Workout(WorkoutID), 
                       FOREIGN KEY (ExerciseID) REFERENCES Exercise(ExerciseID), 
                   );
@@ -113,7 +114,6 @@ namespace NEA
                       Reps INTEGER NOT NULL CHECK (Reps > 0),
                       Weight REAL NOT NULL CHECK (Weight > 0),
                       [Order] INTEGER NOT NULL CHECK ([Order] > 0), -- Wrapped in brackets because ORDER is a reserved keyword
-                      RestDuration REAL CHECK (RestDuration > 0)
                       FOREIGN KEY (UserID) REFERENCES User(UserID), 
                       FOREIGN KEY (ExerciseID) REFERENCES Exercise(ExerciseID) 
                   );
@@ -124,7 +124,6 @@ namespace NEA
                       Duration INTEGER NOT NULL CHECK (Duration > 0),
                       Weight REAL NOT NULL CHECK (Weight > 0),
                       Speed REAL CHECK (Speed > 0),
-                      PostExerciseRestDuraiton REAL CHECK (PostExerciseRestDuration > 0)
                       FOREIGN KEY (UserID) REFERENCES User(UserID), 
                       FOREIGN KEY (ExerciseID) REFERENCES Exercise(ExerciseID) 
                   );";
@@ -320,7 +319,7 @@ namespace NEA
 
         public string GetExerciseDetails(string ExerciseID)
         {
-            return GetFieldFromKey<string>("Exercise", "ExerciseID", ExerciseID, "ExerciseDetails");
+            return GetFieldFromKey<string>("Exercise", "ExerciseID", ExerciseID, "Details");
         }
 
 
@@ -341,7 +340,7 @@ namespace NEA
 
                 using (var command = new SqliteCommand(sql, connection))
                 {
-                    command.Parameters.AddWithValue("@ExerciseType", Equipment.ToString());
+                    command.Parameters.AddWithValue("@Equipment", Equipment.ToString());
                     command.Parameters.AddWithValue("@UserID", UserID);
 
                     command.ExecuteNonQuery();
@@ -390,7 +389,7 @@ namespace NEA
                 connection.Open();
 
                 string sql = @"
-                INSERT INTO UserAvailableEquipment
+                INSERT INTO ExerciseAvailableEquipment
                 (Equipment, ExerciseID)
                 VALUES
                 (@Equipment, @ExerciseID);";
@@ -454,10 +453,9 @@ namespace NEA
                 {
                     command.Parameters.AddWithValue("@UserID", UserID);
                     command.Parameters.AddWithValue("@ExerciseID", ExerciseID);
-                    command.Parameters.AddWithValue("@Duration", Reps);
+                    command.Parameters.AddWithValue("@Reps", Reps);
                     command.Parameters.AddWithValue("@Weight", Weight);
-                    command.Parameters.AddWithValue("@Speed", Order);
-                    command.Parameters.AddWithValue("@Speed", Order);
+                    command.Parameters.AddWithValue("@Order", Order);
 
                     command.ExecuteNonQuery();
                 }
@@ -537,8 +535,8 @@ namespace NEA
                 string sql = @"
                 UPDATE UserTimedTargets
                 SET Duration = @Duration,
-                    Weight = @Weight
-                    Speed = @Speed
+                    Weight = @Weight,
+                    Speed = @Speed,
                 WHERE UserID = @UserID AND ExerciseID = @ExerciseID)";
 
                 using (var command = new SqliteCommand(sql, connection))
@@ -564,8 +562,8 @@ namespace NEA
 
             string exerciseName = GetExerciseName(ExerciseID);
             string exerciseDescription = GetExerciseDetails(ExerciseID);
-            string exerciseTargetMuscle = GetExerciseTargetMuscle(ExerciseID);
-            string exerciseType = GetExerciseType(ExerciseID);
+            MuscleGroup exerciseTargetMuscle = GetExerciseTargetMuscle(ExerciseID);
+            ExerciseType exerciseType = GetExerciseType(ExerciseID);
 
             TimedExercise timedExercise = new TimedExercise(exerciseName, exerciseDescription, exerciseType, exerciseTargetMuscle,
                 postExerciseRestDuration, weight, speed, duration);
@@ -593,7 +591,7 @@ namespace NEA
                 using (var command = new SqliteCommand(sql, connection))
                 {
                     command.Parameters.AddWithValue("@UserID", UserID);
-                    command.Parameters.AddWithValue("@Date", Date);
+                    command.Parameters.AddWithValue("@Date", sqlDateText);
                     command.Parameters.AddWithValue("@Completed", Completed_Int);
                     command.Parameters.AddWithValue("@workoutType", workoutType);
 
@@ -645,7 +643,7 @@ namespace NEA
         }
 
         // USER-REP-BASED-SET CONJOINED WITH USER-TIMED-EXERCISE METHODS
-        public DateTime? GetMostRecentDateOfWorkouType(string userID, WorkoutType workoutType)
+        public DateTime? GetMostRecentDateOfWorkoutType(string userID, WorkoutType workoutType)
         {
             using (SqliteConnection connection =
                 new SqliteConnection(connectionString))
@@ -681,7 +679,7 @@ namespace NEA
         // USER-REP-BASED-SET METHODS
         public void AddRepBasedExerciseToWorkout(int workoutID, RepBasedExercise exercise, int exerciseOrder)
         {
-            int ExerciseID = GetFieldFromKey<int>("Exericse", "Name", exercise.ExerciseName, "ExerciseID");
+            int ExerciseID = GetFieldFromKey<int>("Exercise", "Name", exercise.ExerciseName, "ExerciseID");
             using (SqliteConnection connection = new SqliteConnection(connectionString))
             {
                 connection.Open();
@@ -729,7 +727,7 @@ namespace NEA
         public void AddTimedExerciseToWorkout(int workoutID, TimedExercise exercise, int exerciseOrder)
         {
             int Completed_Int = exercise.Completed ? 1 : 0;
-            int ExerciseID = GetFieldFromKey<int>("Exericse", "Name", exercise.ExerciseName, "ExerciseID");
+            int ExerciseID = GetFieldFromKey<int>("Exercise", "Name", exercise.ExerciseName, "ExerciseID");
             using (var connection = new SqliteConnection(connectionString))
             {
                 connection.Open();

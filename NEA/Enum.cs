@@ -56,8 +56,15 @@ namespace NEA
     //Contains list of the possible sets of workout types
     public enum WorkoutType
     {
-        Strength,
-        Cardio
+        FullBody,
+        UpperBody,
+        LowerBody,
+        Push,
+        Pull,
+        Legs,
+        Core,
+        Cardio,
+        Mobility
     }
 
     //Contains list of all the possible equipments which are available to the program
