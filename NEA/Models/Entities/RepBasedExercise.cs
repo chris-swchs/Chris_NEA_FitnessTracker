@@ -10,8 +10,8 @@ namespace NEA.Models.Entities
     {
         public Set[] Sets { get; private set; }
 
-        public RepBasedExercise(string exerciseName, string exerciseDescription, ExerciseType exerciseType, MuscleGroup targetMuscle, Set[] sets)
-            : base(exerciseName, exerciseDescription, exerciseType, targetMuscle)
+        public RepBasedExercise(string exerciseName, string exerciseDescription, ExerciseType exerciseType, MuscleGroup targetMuscle, int restDuration, Set[] sets)
+            : base(exerciseName, exerciseDescription, exerciseType, targetMuscle, restDuration)
         {
             Sets = sets;
         }

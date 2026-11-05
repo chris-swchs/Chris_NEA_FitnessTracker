@@ -22,7 +22,7 @@ namespace NEA
             DatabaseManager DB = new DatabaseManager();
             DB.InitializeDatabase();
 
-            LinkedList list = new LinkedList();
+            CustomLinkedList<string> list = new CustomLinkedList<string>("John", "James", "Harry");
 
             WorkoutTypeSelection.SendDatabase(DB);
 
@@ -70,23 +70,78 @@ namespace NEA
                 MainMuscleGroupPriority = MainMuscleGroup.Chest
             };
 
+            // USER 2: Beginner focused on cardiovascular fitness
+            User cardioUser = new User(
+                "TEST002",
+                "cardio@example.com",
+                "TestPassword123",
+                DateTime.Today
+            );
+
+            UserSettings cardioSettings = new UserSettings
+            {
+                PrimaryGoal = Goal.CardiovascularFitness,
+                SecondaryGoal = Goal.GeneralFitness,
+                Age = 22,
+                ExperienceLevel = ExperienceLevel.Beginner,
+                PreferredSessionDuration = 40,
+                PreferredTrainingDays = 3,
+                MotivationDisciplineInterpolation = 0.6f,
+                PreferredTrainingIntensity = Frequency.Moderate,
+                CompoundIsolationInterpolation = 0.7f,
+                PreferredWorkoutDifficulty = Difficulty.Moderate,
+                CardioPreference = Frequency.High,
+                MainMuscleGroupPriority = MainMuscleGroup.Legs
+            };
+
+            cardioUser.UpdateSettings(cardioSettings);
+
+
+            // USER 3: Intermediate focused on strength
+            User strengthUser = new User(
+                "TEST003",
+                "strength@example.com",
+                "TestPassword123",
+                DateTime.Today
+            );
+
+            UserSettings strengthSettings = new UserSettings
+            {
+                PrimaryGoal = Goal.Strength,
+                SecondaryGoal = Goal.MuscleGrowth,
+                Age = 29,
+                ExperienceLevel = ExperienceLevel.Intermediate,
+                PreferredSessionDuration = 70,
+                PreferredTrainingDays = 4,
+                MotivationDisciplineInterpolation = 0.85f,
+                PreferredTrainingIntensity = Frequency.High,
+                CompoundIsolationInterpolation = 0.9f,
+                PreferredWorkoutDifficulty = Difficulty.Hard,
+                CardioPreference = Frequency.Low,
+                MainMuscleGroupPriority = MainMuscleGroup.Back
+            };
+
+            strengthUser.UpdateSettings(strengthSettings);
+
             // Assign settings to user
             bodybuilder.UpdateSettings(bodybuilderSettings);
 
-            Dictionary<DateTime, WorkoutType> workoutSlots =
-               new Dictionary<DateTime, WorkoutType>
+            Dictionary<DateTime, WorkoutType> workoutSlots = new Dictionary<DateTime, WorkoutType>
                {
                 { new DateTime(2026, 11, 3), default(WorkoutType) },
+                { new DateTime(2026, 11, 4), default(WorkoutType) },
                 { new DateTime(2026, 11, 5), default(WorkoutType) },
                 { new DateTime(2026, 11, 7), default(WorkoutType) },
-                { new DateTime(2026, 11, 8), default(WorkoutType) }
+                { new DateTime(2026, 11, 8), default(WorkoutType) },
+                { new DateTime(2026, 11, 9), default(WorkoutType) }
                };
 
-            WorkoutTypeSelection.RunAlgorithm(bodybuilder, workoutSlots);
+            WorkoutScheduleGeneration.GenerateWorkoutSchedule(strengthUser, workoutSlots);
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
+
 
         }
     }

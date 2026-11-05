@@ -105,4 +105,20 @@ namespace NEA
         Moderate,
         Hard
     }
+
+    //  Contains functions for gathering dater related to a defined enum within the program
+    public static class EnumDefinitions
+    {
+        // TO DO - Make it return linked  list of muscle groups
+        public static int GetWorkoutTypeMuscleGroups(WorkoutType workoutType)
+        {
+            switch (workoutType)
+            {
+                case WorkoutType.Pull:
+                    return 999;
+                default:
+                    return 3;
+            }
+        }
+    }
 }

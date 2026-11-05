@@ -34,7 +34,18 @@ namespace NEA
 
         public double Get(T1 key1, T2 key2)
         {
-            return values[key1][key2];
+            try
+            {
+                return values[key1][key2];
+            }
+            catch (KeyNotFoundException)
+            {
+                System.Diagnostics.Debug.WriteLine(
+                    $"Missing compatibility value: {key1}, {key2}"
+                );
+
+                return 0.0;
+            }
         }
     }
 }

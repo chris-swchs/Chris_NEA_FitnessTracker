@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿
+using System.Collections.Generic;
 
 namespace NEA
 {
@@ -8,7 +9,9 @@ namespace NEA
             WorkoutType_Goal
         { get; private set; }
 
-        public static CompatibilityMatrix<WorkoutType, MainMuscleGroup> WorkoutType_MuscleGroup { get; private set; }
+        public static CompatibilityMatrix<WorkoutType, MainMuscleGroup>
+            WorkoutType_MuscleGroup
+        { get; private set; }
 
         public static CompatibilityMatrix<WorkoutType, Frequency>
             WorkoutType_CardioPreference
@@ -16,11 +19,14 @@ namespace NEA
 
         static CompatibilityDefinitions()
         {
-            WorkoutType_Goal = new CompatibilityMatrix<WorkoutType, Goal>();
+            WorkoutType_Goal =
+                new CompatibilityMatrix<WorkoutType, Goal>();
 
-            WorkoutType_MuscleGroup = new CompatibilityMatrix<WorkoutType, MainMuscleGroup>();
+            WorkoutType_MuscleGroup =
+                new CompatibilityMatrix<WorkoutType, MainMuscleGroup>();
 
-            WorkoutType_CardioPreference = new CompatibilityMatrix<WorkoutType, Frequency>();
+            WorkoutType_CardioPreference =
+                new CompatibilityMatrix<WorkoutType, Frequency>();
 
             InitialiseWorkoutType_Goals();
             InitialiseWorkoutType_MuscleGroup();
@@ -34,6 +40,7 @@ namespace NEA
                 new Dictionary<Goal, double>
                 {
                     { Goal.Strength, 0.85 },
+                    { Goal.MuscleGrowth, 0.90 },
                     { Goal.CardiovascularFitness, 0.65 },
                     { Goal.GeneralFitness, 1.00 }
                 });
@@ -43,6 +50,7 @@ namespace NEA
                 new Dictionary<Goal, double>
                 {
                     { Goal.Strength, 0.95 },
+                    { Goal.MuscleGrowth, 1.00 },
                     { Goal.CardiovascularFitness, 0.30 },
                     { Goal.GeneralFitness, 0.75 }
                 });
@@ -52,6 +60,7 @@ namespace NEA
                 new Dictionary<Goal, double>
                 {
                     { Goal.Strength, 0.95 },
+                    { Goal.MuscleGrowth, 1.00 },
                     { Goal.CardiovascularFitness, 0.50 },
                     { Goal.GeneralFitness, 0.80 }
                 });
@@ -61,6 +70,7 @@ namespace NEA
                 new Dictionary<Goal, double>
                 {
                     { Goal.Strength, 0.95 },
+                    { Goal.MuscleGrowth, 1.00 },
                     { Goal.CardiovascularFitness, 0.20 },
                     { Goal.GeneralFitness, 0.65 }
                 });
@@ -70,6 +80,7 @@ namespace NEA
                 new Dictionary<Goal, double>
                 {
                     { Goal.Strength, 0.95 },
+                    { Goal.MuscleGrowth, 1.00 },
                     { Goal.CardiovascularFitness, 0.20 },
                     { Goal.GeneralFitness, 0.65 }
                 });
@@ -79,6 +90,7 @@ namespace NEA
                 new Dictionary<Goal, double>
                 {
                     { Goal.Strength, 1.00 },
+                    { Goal.MuscleGrowth, 1.00 },
                     { Goal.CardiovascularFitness, 0.35 },
                     { Goal.GeneralFitness, 0.70 }
                 });
@@ -88,6 +100,7 @@ namespace NEA
                 new Dictionary<Goal, double>
                 {
                     { Goal.Strength, 0.55 },
+                    { Goal.MuscleGrowth, 0.55 },
                     { Goal.CardiovascularFitness, 0.55 },
                     { Goal.GeneralFitness, 0.80 }
                 });
@@ -97,6 +110,7 @@ namespace NEA
                 new Dictionary<Goal, double>
                 {
                     { Goal.Strength, 0.20 },
+                    { Goal.MuscleGrowth, 0.15 },
                     { Goal.CardiovascularFitness, 1.00 },
                     { Goal.GeneralFitness, 0.85 }
                 });
@@ -106,6 +120,7 @@ namespace NEA
                 new Dictionary<Goal, double>
                 {
                     { Goal.Strength, 0.30 },
+                    { Goal.MuscleGrowth, 0.20 },
                     { Goal.CardiovascularFitness, 0.35 },
                     { Goal.GeneralFitness, 0.80 }
                 });
@@ -118,7 +133,12 @@ namespace NEA
                 new Dictionary<MainMuscleGroup, double>
                 {
                     { MainMuscleGroup.Chest, 0.80 },
-                    { MainMuscleGroup.Triceps, 0.75 }
+                    { MainMuscleGroup.Shoulders, 0.80 },
+                    { MainMuscleGroup.Biceps, 0.75 },
+                    { MainMuscleGroup.Triceps, 0.75 },
+                    { MainMuscleGroup.Forearms, 0.65 },
+                    { MainMuscleGroup.Back, 0.85 },
+                    { MainMuscleGroup.Legs, 0.90 }
                 });
 
             WorkoutType_MuscleGroup.AddRange(
@@ -126,7 +146,12 @@ namespace NEA
                 new Dictionary<MainMuscleGroup, double>
                 {
                     { MainMuscleGroup.Chest, 0.95 },
-                    { MainMuscleGroup.Triceps, 0.90 }
+                    { MainMuscleGroup.Shoulders, 0.95 },
+                    { MainMuscleGroup.Biceps, 0.95 },
+                    { MainMuscleGroup.Triceps, 0.90 },
+                    { MainMuscleGroup.Forearms, 0.85 },
+                    { MainMuscleGroup.Back, 0.95 },
+                    { MainMuscleGroup.Legs, 0.05 }
                 });
 
             WorkoutType_MuscleGroup.AddRange(
@@ -134,7 +159,12 @@ namespace NEA
                 new Dictionary<MainMuscleGroup, double>
                 {
                     { MainMuscleGroup.Chest, 0.05 },
-                    { MainMuscleGroup.Triceps, 0.05 }
+                    { MainMuscleGroup.Shoulders, 0.05 },
+                    { MainMuscleGroup.Biceps, 0.05 },
+                    { MainMuscleGroup.Triceps, 0.05 },
+                    { MainMuscleGroup.Forearms, 0.10 },
+                    { MainMuscleGroup.Back, 0.20 },
+                    { MainMuscleGroup.Legs, 1.00 }
                 });
 
             WorkoutType_MuscleGroup.AddRange(
@@ -142,7 +172,12 @@ namespace NEA
                 new Dictionary<MainMuscleGroup, double>
                 {
                     { MainMuscleGroup.Chest, 1.00 },
-                    { MainMuscleGroup.Triceps, 1.00 }
+                    { MainMuscleGroup.Shoulders, 1.00 },
+                    { MainMuscleGroup.Biceps, 0.10 },
+                    { MainMuscleGroup.Triceps, 1.00 },
+                    { MainMuscleGroup.Forearms, 0.20 },
+                    { MainMuscleGroup.Back, 0.10 },
+                    { MainMuscleGroup.Legs, 0.05 }
                 });
 
             WorkoutType_MuscleGroup.AddRange(
@@ -150,7 +185,12 @@ namespace NEA
                 new Dictionary<MainMuscleGroup, double>
                 {
                     { MainMuscleGroup.Chest, 0.10 },
-                    { MainMuscleGroup.Triceps, 0.10 }
+                    { MainMuscleGroup.Shoulders, 0.40 },
+                    { MainMuscleGroup.Biceps, 1.00 },
+                    { MainMuscleGroup.Triceps, 0.10 },
+                    { MainMuscleGroup.Forearms, 0.95 },
+                    { MainMuscleGroup.Back, 1.00 },
+                    { MainMuscleGroup.Legs, 0.10 }
                 });
 
             WorkoutType_MuscleGroup.AddRange(
@@ -158,7 +198,12 @@ namespace NEA
                 new Dictionary<MainMuscleGroup, double>
                 {
                     { MainMuscleGroup.Chest, 0.05 },
-                    { MainMuscleGroup.Triceps, 0.05 }
+                    { MainMuscleGroup.Shoulders, 0.05 },
+                    { MainMuscleGroup.Biceps, 0.05 },
+                    { MainMuscleGroup.Triceps, 0.05 },
+                    { MainMuscleGroup.Forearms, 0.10 },
+                    { MainMuscleGroup.Back, 0.20 },
+                    { MainMuscleGroup.Legs, 1.00 }
                 });
 
             WorkoutType_MuscleGroup.AddRange(
@@ -166,7 +211,12 @@ namespace NEA
                 new Dictionary<MainMuscleGroup, double>
                 {
                     { MainMuscleGroup.Chest, 0.15 },
-                    { MainMuscleGroup.Triceps, 0.15 }
+                    { MainMuscleGroup.Shoulders, 0.20 },
+                    { MainMuscleGroup.Biceps, 0.10 },
+                    { MainMuscleGroup.Triceps, 0.15 },
+                    { MainMuscleGroup.Forearms, 0.15 },
+                    { MainMuscleGroup.Back, 0.45 },
+                    { MainMuscleGroup.Legs, 0.30 }
                 });
 
             WorkoutType_MuscleGroup.AddRange(
@@ -174,7 +224,12 @@ namespace NEA
                 new Dictionary<MainMuscleGroup, double>
                 {
                     { MainMuscleGroup.Chest, 0.10 },
-                    { MainMuscleGroup.Triceps, 0.10 }
+                    { MainMuscleGroup.Shoulders, 0.20 },
+                    { MainMuscleGroup.Biceps, 0.10 },
+                    { MainMuscleGroup.Triceps, 0.10 },
+                    { MainMuscleGroup.Forearms, 0.10 },
+                    { MainMuscleGroup.Back, 0.20 },
+                    { MainMuscleGroup.Legs, 0.60 }
                 });
 
             WorkoutType_MuscleGroup.AddRange(
@@ -182,7 +237,12 @@ namespace NEA
                 new Dictionary<MainMuscleGroup, double>
                 {
                     { MainMuscleGroup.Chest, 0.20 },
-                    { MainMuscleGroup.Triceps, 0.20 }
+                    { MainMuscleGroup.Shoulders, 0.40 },
+                    { MainMuscleGroup.Biceps, 0.20 },
+                    { MainMuscleGroup.Triceps, 0.20 },
+                    { MainMuscleGroup.Forearms, 0.20 },
+                    { MainMuscleGroup.Back, 0.40 },
+                    { MainMuscleGroup.Legs, 0.40 }
                 });
         }
 

@@ -7,14 +7,24 @@ using System.Threading.Tasks;
 
 namespace NEA.Models.LinkedLists
 {
-    public class LinkedList
+    public class CustomLinkedList<T>
     {
-        private Node head; // The starting entry point of the list
+        private Node<T> head; // The starting entry point of the list
+
+        public CustomLinkedList(params T[] values)
+        {
+            head = null;
+
+            foreach (T value in values)
+            {
+                Append(value);
+            }
+        }
 
         // Add a node to the very end of the list
-        public void Append(string data)
+        public void Append(T data)
         {
-            Node newNode = new Node(data);
+            Node<T> newNode = new Node<T>(data);
 
             // If the list is empty, make this the head
             if (head == null)
@@ -24,7 +34,7 @@ namespace NEA.Models.LinkedLists
             }
 
             // Otherwise, traverse to the end of the list
-            Node current = head;
+            Node<T> current = head;
             while (current.Next != null)
             {
                 current = current.Next;
@@ -35,15 +45,15 @@ namespace NEA.Models.LinkedLists
         }
 
         // Add a node to the very front of the list
-        public void Prepend(string data)
+        public void Prepend(T data)
         {
-            Node newNode = new Node(data);
+            Node<T> newNode = new Node<T>(data);
             newNode.Next = head; // Point new node to the old head
             head = newNode;      // Move head to point to the new node
         }
 
         // Returns the data at a specific index 
-        public string GetAt(int index)
+        public T GetAt(int index)
         {
             // Case 1: Index cannot be negative
             if (index < 0)
@@ -51,7 +61,7 @@ namespace NEA.Models.LinkedLists
                 throw new ArgumentOutOfRangeException(nameof(index), "Index cannot be negative.");
             }
 
-            Node current = head;
+            Node<T> current = head;
             int counter = 0;
 
             // Step through the chain until we reach the index or the end of the list
@@ -73,7 +83,7 @@ namespace NEA.Models.LinkedLists
         // Returns length of the linked list - number of elements
         public int GetLength()
         {
-            Node current = head;
+            Node<T> current = head;
             int counter = 0;
 
             while (current != null)
@@ -84,12 +94,12 @@ namespace NEA.Models.LinkedLists
             return counter;
         }
 
-        public string[] ToArray()
+        public T[] ToArray()
         {
-            Node current = head;
+            Node<T> current = head;
             int counter = 0;
 
-            string[] linkedListArray = new string[this.GetLength()];
+            T[] linkedListArray = new T[GetLength()];
 
             while (current != null)
             {
@@ -103,7 +113,7 @@ namespace NEA.Models.LinkedLists
         // Print the full list layout
         public void PrintList()
         {
-            Node current = head;
+            Node<T> current = head;
             while (current != null)
             {
                 Console.Write(current.Data + " -> ");

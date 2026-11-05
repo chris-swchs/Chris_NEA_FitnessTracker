@@ -13,6 +13,7 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
 using System.Xml.Linq;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace NEA
@@ -71,12 +72,12 @@ namespace NEA
                   CREATE TABLE IF NOT EXISTS Workout (
                       WorkoutID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
                       UserID TEXT NOT NULL,
-                      Date TEXT NOT NULL CHECK (length(Date) = 10 AND 
-                        Date GLOB '[0-3][0-9]:[0-1][0-9]:[0-9][0-9][0-9][0-9]')
+                      Date TEXT NOT NULL CHECK (length(Date) = 10 
+                      AND Date GLOB '[0-9][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9]'),
                       Completed INTEGER NOT NULL DEFAULT 0
                         CHECK (Completed IN (0, 1)),
                       WorkoutType TEXT NOT NULL,
-                      FOREIGN KEY (UserID) REFERENCES User(UserID), 
+                      FOREIGN KEY (UserID) REFERENCES User(UserID) 
                   );
 
                   CREATE TABLE IF NOT EXISTS WorkoutRepBasedSet (
@@ -86,10 +87,11 @@ namespace NEA
                       TargetWeight REAL NOT NULL,
                       TargetReps INTEGER NOT NULL ,
                       ExerciseOrder INTEGER  NOT NULL ,
-                      RestDuration INTEGER NOT NUL,
-                      Completed INTEGER NOT NULL CHECK (Completed IN (0, 1)),
+                      RestDuration INTEGER NOT NULL,
+                      Completed INTEGER NOT NULL DEFAULT 0
+                        CHECK (Completed IN (0, 1)),
                       FOREIGN KEY (WorkoutID) REFERENCES Workout(WorkoutID), 
-                      FOREIGN KEY (ExerciseID) REFERENCES Exercise(ExerciseID), 
+                      FOREIGN KEY (ExerciseID) REFERENCES Exercise(ExerciseID)
                   );
 
                   CREATE TABLE IF NOT EXISTS WorkoutTimedExercise (
@@ -101,9 +103,10 @@ namespace NEA
                       Duration INTEGER NOT NULL ,
                       ExerciseOrder INTEGER  NOT NULL ,
                       RestDuration INTEGER NOT NULL,
-                      Completed INTEGER NOT NULL CHECK (Completed IN (0, 1)) ,
+                      Completed INTEGER NOT NULL DEFAULT 0
+                        CHECK (Completed IN (0, 1)),
                       FOREIGN KEY (WorkoutID) REFERENCES Workout(WorkoutID), 
-                      FOREIGN KEY (ExerciseID) REFERENCES Exercise(ExerciseID), 
+                      FOREIGN KEY (ExerciseID) REFERENCES Exercise(ExerciseID) 
                   );
                 
 
@@ -112,8 +115,9 @@ namespace NEA
                       UserID TEXT NOT NULL,
                       ExerciseID INTEGER NOT NULL,
                       Reps INTEGER NOT NULL CHECK (Reps > 0),
-                      Weight REAL NOT NULL CHECK (Weight > 0),
+                      Weight REAL NOT NULL CHECK (Weight >= 0),
                       [Order] INTEGER NOT NULL CHECK ([Order] > 0), -- Wrapped in brackets because ORDER is a reserved keyword
+                      RestDuration INT NOT NULL CHECK (RestDuration > 0),
                       FOREIGN KEY (UserID) REFERENCES User(UserID), 
                       FOREIGN KEY (ExerciseID) REFERENCES Exercise(ExerciseID) 
                   );
@@ -121,9 +125,11 @@ namespace NEA
                   CREATE TABLE IF NOT EXISTS UserTimedTargets (
                       UserTimedTargetsID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
                       UserID TEXT NOT NULL,
+                      ExerciseID INTEGER NOT NULL,
                       Duration INTEGER NOT NULL CHECK (Duration > 0),
-                      Weight REAL NOT NULL CHECK (Weight > 0),
+                      Weight REAL NOT NULL CHECK (Weight >= 0),
                       Speed REAL CHECK (Speed > 0),
+                      RestDuration INT CHECK (RestDuration > 0),
                       FOREIGN KEY (UserID) REFERENCES User(UserID), 
                       FOREIGN KEY (ExerciseID) REFERENCES Exercise(ExerciseID) 
                   );";
@@ -131,6 +137,11 @@ namespace NEA
 
                 using (var command = new SqliteCommand(CreateTables, connection))
                 {
+                    command.ExecuteNonQuery();
+                }
+                using (var command = connection.CreateCommand())
+                {
+                    command.CommandText = "PRAGMA foreign_keys = ON;";
                     command.ExecuteNonQuery();
                 }
             }
@@ -215,7 +226,7 @@ namespace NEA
         //Retrieves an array of elements of data within a field for all records with a specific attribute
         private string[] GetMultiValuesInFieldFromKey(string table, string pkFieldName, string keyAttribute, string field)
         {
-            LinkedList cells = new LinkedList();
+            CustomLinkedList cells = new LinkedList();
 
             using (var connection = new SqliteConnection(connectionString))
             {
@@ -307,14 +318,14 @@ namespace NEA
             return GetFieldFromKey<string>("Exercise", "ExerciseID", ExerciseID, "Name");
         }
 
-        public string GetExerciseType(string ExerciseID)
+        public ExerciseType GetExerciseType(string ExerciseID)
         {
-            return GetFieldFromKey<string>("Exercise", "ExerciseID", ExerciseID, "ExerciseType");
+            return (ExerciseType)EnumDefinitions.Parse(typeof(ExerciseType), GetFieldFromKey<string>("Exercise", "ExerciseID", ExerciseID, "ExerciseType"));
         }
 
-        public string GetExerciseTargetMuscle(string ExerciseID)
+        public MuscleGroup GetExerciseTargetMuscle(string ExerciseID)
         {
-            return GetFieldFromKey<string>("Exercise", "ExerciseID", ExerciseID, "TargetMuscle");
+            return (MuscleGroup)EnumDefinitions.Parse(typeof(MuscleGroup), GetFieldFromKey<string>("Exercise", "ExerciseID", ExerciseID, "TargetMuscle"));
         }
 
         public string GetExerciseDetails(string ExerciseID)
@@ -558,7 +569,7 @@ namespace NEA
             float weight = GetFieldFromKey<float>("UserTimedTargets", "UserTimedTargetsID", PK, "Weight");
             float speed = GetFieldFromKey<float>("UserTimedTargets", "UserTimedTargetsID", PK, "Speed");
             float duration = GetFieldFromKey<float>("UserTimedTargets", "UserTimedTargetsID", PK, "Duration");
-            float postExerciseRestDuration = GetFieldFromKey<float>("UserTimedTargets", "UserTimedTargetsID", PK, "PostExerciseRestDuration");
+            int RestDuration = GetFieldFromKey<int>("UserTimedTargets", "UserTimedTargetsID", PK, "RestDuration");
 
             string exerciseName = GetExerciseName(ExerciseID);
             string exerciseDescription = GetExerciseDetails(ExerciseID);
@@ -566,7 +577,7 @@ namespace NEA
             ExerciseType exerciseType = GetExerciseType(ExerciseID);
 
             TimedExercise timedExercise = new TimedExercise(exerciseName, exerciseDescription, exerciseType, exerciseTargetMuscle,
-                postExerciseRestDuration, weight, speed, duration);
+                RestDuration, weight, speed, duration);
 
             return timedExercise;
         }
