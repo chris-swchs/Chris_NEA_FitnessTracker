@@ -5,12 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 namespace NEA.Models.LinkedLists
 {
-    public class Node
+    public class Node<T>
     {
-        public string Data { get; set; }
-        public Node Next { get; set; } // Nullable, as the last node points to null
+        public T Data { get; set; }
+        public Node<T> Next { get; set; } // Nullable, as the last node points to null
 
-        public Node(string data)
+        public Node(T data)
         {
             Data = data;
             Next = null; // Default pointer is null

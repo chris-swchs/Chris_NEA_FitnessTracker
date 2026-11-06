@@ -72,12 +72,12 @@ namespace NEA
                   CREATE TABLE IF NOT EXISTS Workout (
                       WorkoutID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
                       UserID TEXT NOT NULL,
-                      Date TEXT NOT NULL CHECK (length(Date) = 10 AND 
-                        Date GLOB '[0-3][0-9]:[0-1][0-9]:[0-9][0-9][0-9][0-9]')
+                      Date TEXT NOT NULL CHECK (length(Date) = 10 
+                      AND Date GLOB '[0-9][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9]'),
                       Completed INTEGER NOT NULL DEFAULT 0
                         CHECK (Completed IN (0, 1)),
                       WorkoutType TEXT NOT NULL,
-                      FOREIGN KEY (UserID) REFERENCES User(UserID), 
+                      FOREIGN KEY (UserID) REFERENCES User(UserID) 
                   );
 
                   CREATE TABLE IF NOT EXISTS WorkoutRepBasedSet (
@@ -87,10 +87,11 @@ namespace NEA
                       TargetWeight REAL NOT NULL,
                       TargetReps INTEGER NOT NULL ,
                       ExerciseOrder INTEGER  NOT NULL ,
-                      RestDuration INTEGER NOT NUL,
-                      Completed INTEGER NOT NULL CHECK (Completed IN (0, 1)),
+                      RestDuration INTEGER NOT NULL,
+                      Completed INTEGER NOT NULL DEFAULT 0
+                        CHECK (Completed IN (0, 1)),
                       FOREIGN KEY (WorkoutID) REFERENCES Workout(WorkoutID), 
-                      FOREIGN KEY (ExerciseID) REFERENCES Exercise(ExerciseID), 
+                      FOREIGN KEY (ExerciseID) REFERENCES Exercise(ExerciseID)
                   );
 
                   CREATE TABLE IF NOT EXISTS WorkoutTimedExercise (
@@ -102,9 +103,10 @@ namespace NEA
                       Duration INTEGER NOT NULL ,
                       ExerciseOrder INTEGER  NOT NULL ,
                       RestDuration INTEGER NOT NULL,
-                      Completed INTEGER NOT NULL CHECK (Completed IN (0, 1)) ,
+                      Completed INTEGER NOT NULL DEFAULT 0
+                        CHECK (Completed IN (0, 1)),
                       FOREIGN KEY (WorkoutID) REFERENCES Workout(WorkoutID), 
-                      FOREIGN KEY (ExerciseID) REFERENCES Exercise(ExerciseID), 
+                      FOREIGN KEY (ExerciseID) REFERENCES Exercise(ExerciseID) 
                   );
                 
 
@@ -113,9 +115,9 @@ namespace NEA
                       UserID TEXT NOT NULL,
                       ExerciseID INTEGER NOT NULL,
                       Reps INTEGER NOT NULL CHECK (Reps > 0),
-                      Weight REAL NOT NULL CHECK (Weight > 0),
+                      Weight REAL NOT NULL CHECK (Weight >= 0),
                       [Order] INTEGER NOT NULL CHECK ([Order] > 0), -- Wrapped in brackets because ORDER is a reserved keyword
-                      RestDuration INT CHECK (RestDuration > 0)
+                      RestDuration INT NOT NULL CHECK (RestDuration > 0),
                       FOREIGN KEY (UserID) REFERENCES User(UserID), 
                       FOREIGN KEY (ExerciseID) REFERENCES Exercise(ExerciseID) 
                   );
@@ -123,10 +125,11 @@ namespace NEA
                   CREATE TABLE IF NOT EXISTS UserTimedTargets (
                       UserTimedTargetsID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
                       UserID TEXT NOT NULL,
+                      ExerciseID INTEGER NOT NULL,
                       Duration INTEGER NOT NULL CHECK (Duration > 0),
-                      Weight REAL NOT NULL CHECK (Weight > 0),
+                      Weight REAL NOT NULL CHECK (Weight >= 0),
                       Speed REAL CHECK (Speed > 0),
-                      RestDuration INT CHECK (RestDuration > 0)
+                      RestDuration INT CHECK (RestDuration > 0),
                       FOREIGN KEY (UserID) REFERENCES User(UserID), 
                       FOREIGN KEY (ExerciseID) REFERENCES Exercise(ExerciseID) 
                   );";
@@ -134,6 +137,11 @@ namespace NEA
 
                 using (var command = new SqliteCommand(CreateTables, connection))
                 {
+                    command.ExecuteNonQuery();
+                }
+                using (var command = connection.CreateCommand())
+                {
+                    command.CommandText = "PRAGMA foreign_keys = ON;";
                     command.ExecuteNonQuery();
                 }
             }
@@ -218,7 +226,7 @@ namespace NEA
         //Retrieves an array of elements of data within a field for all records with a specific attribute
         private string[] GetMultiValuesInFieldFromKey(string table, string pkFieldName, string keyAttribute, string field)
         {
-            LinkedList cells = new LinkedList();
+            CustomLinkedList cells = new LinkedList();
 
             using (var connection = new SqliteConnection(connectionString))
             {
@@ -312,12 +320,12 @@ namespace NEA
 
         public ExerciseType GetExerciseType(string ExerciseID)
         {
-            return (ExerciseType)Enum.Parse(typeof(ExerciseType), GetFieldFromKey<string>("Exercise", "ExerciseID", ExerciseID, "ExerciseType"));
+            return (ExerciseType)EnumDefinitions.Parse(typeof(ExerciseType), GetFieldFromKey<string>("Exercise", "ExerciseID", ExerciseID, "ExerciseType"));
         }
 
         public MuscleGroup GetExerciseTargetMuscle(string ExerciseID)
         {
-            return (MuscleGroup)Enum.Parse(typeof(MuscleGroup), GetFieldFromKey<string>("Exercise", "ExerciseID", ExerciseID, "TargetMuscle"));
+            return (MuscleGroup)EnumDefinitions.Parse(typeof(MuscleGroup), GetFieldFromKey<string>("Exercise", "ExerciseID", ExerciseID, "TargetMuscle"));
         }
 
         public string GetExerciseDetails(string ExerciseID)

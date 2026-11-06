@@ -14,7 +14,8 @@ namespace NEA.Models.Entities
         public string Email { get; private set; }
         public string Password { get; private set; }
         public DateTime DateCreated { get; private set; }
-        public UserSettings Settings;
+        public UserSettings Settings { get; private set; }
+        public WorkoutSchedule CurrentWorkoutSchedule { get; private set; }
         public User(string userID, string email, string password, DateTime dateCreated)
         {
             UserID = userID;
@@ -27,7 +28,12 @@ namespace NEA.Models.Entities
         {
             Settings = newSettings;
         }
-        
+
+        public void UpdateWorkoutSchedule(WorkoutSchedule newWorkoutSchedule)
+        {
+            CurrentWorkoutSchedule = newWorkoutSchedule;
+        }
+
         public UserSettings GetSettings()
         {
             return Settings;

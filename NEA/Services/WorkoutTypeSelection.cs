@@ -13,34 +13,40 @@ namespace NEA.Services
         {
             db = DB;
         }
-        public static void RunAlgorithm(User user, Dictionary<DateTime, WorkoutType> WorkoutSlots)
+        public static Dictionary<DateTime, WorkoutType> RunAlgorithm(User user, Dictionary<DateTime, WorkoutType> WorkoutSlots)
         {
             // Dates of workouts have been defined, but the workout type assigned to the date has not
-            Dictionary<DateTime, WorkoutType> assignedWorkouts = WorkoutSlots;
+            Dictionary<DateTime, WorkoutType> assignedWorkouts = new Dictionary<DateTime, WorkoutType>();
 
             // Loops through each workout date
-            foreach (var slot in assignedWorkouts)
+            foreach (var slot in WorkoutSlots)
             {
+                Console.WriteLine(slot.Key);
                 double HighestScore = -1000;
                 // Cant be set to null - just incase (score > HighScore) condition is never met
                 WorkoutType HighestScoreWorkoutType = WorkoutType.Push;
                 foreach (WorkoutType workoutType in Enum.GetValues(typeof(WorkoutType)))
                 {
-                    double score = CalculateWorkoutTypeScore(workoutType, user, assignedWorkouts);
-
+                    double score = CalculateWorkoutTypeScore(workoutType, user, assignedWorkouts, slot);
                     if (score > HighestScore)
                     {
                         HighestScoreWorkoutType = workoutType;
                         HighestScore = score;
                     }
+                    // Console.WriteLine($"{workoutType} {score}");
                 }
                 assignedWorkouts[slot.Key] = HighestScoreWorkoutType;
             }
-            Console.WriteLine(assignedWorkouts);
+            foreach (var workout in assignedWorkouts)
+            {
+                Console.WriteLine($"{workout.Key:yyyy-MM-dd}: {workout.Value}");
+            }
+            return assignedWorkouts;
         }
-        private static double CalculateWorkoutTypeScore(WorkoutType workoutType, User user, Dictionary<DateTime, WorkoutType> assignedWorkouts)
+        private static double CalculateWorkoutTypeScore(WorkoutType workoutType, User user, Dictionary<DateTime, WorkoutType> assignedWorkouts, KeyValuePair<DateTime, WorkoutType> currentSlot)
         {
             UserSettings settings = user.GetSettings();
+            
             // Takes into acount 4 settings, prmary goal, sconday goal, muscle priority
             double PrimaryGoalCompatibility = CompatibilityDefinitions.WorkoutType_Goal.Get(workoutType, settings.PrimaryGoal);
             double SecondaryGoalCompatibility = CompatibilityDefinitions.WorkoutType_Goal.Get(workoutType, settings.SecondaryGoal);
@@ -53,17 +59,19 @@ namespace NEA.Services
             {
                 if (slot.Value == workoutType)
                 {
-                    if (slot.Key > lastWorkoutDate)
+                    if (slot.Key > lastWorkoutDate || lastWorkoutDate.HasValue == false)
                     {
                         lastWorkoutDate = slot.Key;
                     }
                 }
             }
-            int? DaysSinceLastUsed = lastWorkoutDate.HasValue ? (DateTime.Today - lastWorkoutDate.Value).Days : (int?)null;
+
+            int? DaysSinceLastUsed = lastWorkoutDate.HasValue ? (currentSlot.Key - lastWorkoutDate.Value).Days : (int?)null;
+
 
             Func<int?, double> CalculateRecenency = days =>
                 days.HasValue
-                    ? Math.Exp(-2 * days.Value)
+                    ? Math.Exp(-0.5 * days.Value)
                     : 0.0;
 
             Func<double, double, double, double, double, double> CalculateScore = (Gp, Gs, M, C, R) =>
