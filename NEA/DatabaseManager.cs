@@ -13,6 +13,7 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
 using System.Xml.Linq;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace NEA
@@ -114,6 +115,7 @@ namespace NEA
                       Reps INTEGER NOT NULL CHECK (Reps > 0),
                       Weight REAL NOT NULL CHECK (Weight > 0),
                       [Order] INTEGER NOT NULL CHECK ([Order] > 0), -- Wrapped in brackets because ORDER is a reserved keyword
+                      RestDuration INT CHECK (RestDuration > 0)
                       FOREIGN KEY (UserID) REFERENCES User(UserID), 
                       FOREIGN KEY (ExerciseID) REFERENCES Exercise(ExerciseID) 
                   );
@@ -124,6 +126,7 @@ namespace NEA
                       Duration INTEGER NOT NULL CHECK (Duration > 0),
                       Weight REAL NOT NULL CHECK (Weight > 0),
                       Speed REAL CHECK (Speed > 0),
+                      RestDuration INT CHECK (RestDuration > 0)
                       FOREIGN KEY (UserID) REFERENCES User(UserID), 
                       FOREIGN KEY (ExerciseID) REFERENCES Exercise(ExerciseID) 
                   );";
@@ -307,14 +310,14 @@ namespace NEA
             return GetFieldFromKey<string>("Exercise", "ExerciseID", ExerciseID, "Name");
         }
 
-        public string GetExerciseType(string ExerciseID)
+        public ExerciseType GetExerciseType(string ExerciseID)
         {
-            return GetFieldFromKey<string>("Exercise", "ExerciseID", ExerciseID, "ExerciseType");
+            return (ExerciseType)Enum.Parse(typeof(ExerciseType), GetFieldFromKey<string>("Exercise", "ExerciseID", ExerciseID, "ExerciseType"));
         }
 
-        public string GetExerciseTargetMuscle(string ExerciseID)
+        public MuscleGroup GetExerciseTargetMuscle(string ExerciseID)
         {
-            return GetFieldFromKey<string>("Exercise", "ExerciseID", ExerciseID, "TargetMuscle");
+            return (MuscleGroup)Enum.Parse(typeof(MuscleGroup), GetFieldFromKey<string>("Exercise", "ExerciseID", ExerciseID, "TargetMuscle"));
         }
 
         public string GetExerciseDetails(string ExerciseID)
@@ -558,7 +561,7 @@ namespace NEA
             float weight = GetFieldFromKey<float>("UserTimedTargets", "UserTimedTargetsID", PK, "Weight");
             float speed = GetFieldFromKey<float>("UserTimedTargets", "UserTimedTargetsID", PK, "Speed");
             float duration = GetFieldFromKey<float>("UserTimedTargets", "UserTimedTargetsID", PK, "Duration");
-            float postExerciseRestDuration = GetFieldFromKey<float>("UserTimedTargets", "UserTimedTargetsID", PK, "PostExerciseRestDuration");
+            int RestDuration = GetFieldFromKey<int>("UserTimedTargets", "UserTimedTargetsID", PK, "RestDuration");
 
             string exerciseName = GetExerciseName(ExerciseID);
             string exerciseDescription = GetExerciseDetails(ExerciseID);
@@ -566,7 +569,7 @@ namespace NEA
             ExerciseType exerciseType = GetExerciseType(ExerciseID);
 
             TimedExercise timedExercise = new TimedExercise(exerciseName, exerciseDescription, exerciseType, exerciseTargetMuscle,
-                postExerciseRestDuration, weight, speed, duration);
+                RestDuration, weight, speed, duration);
 
             return timedExercise;
         }

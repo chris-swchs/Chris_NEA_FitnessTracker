@@ -22,7 +22,6 @@ namespace NEA.Services
             foreach (var slot in assignedWorkouts)
             {
                 double HighestScore = -1000;
-
                 // Cant be set to null - just incase (score > HighScore) condition is never met
                 WorkoutType HighestScoreWorkoutType = WorkoutType.Push;
                 foreach (WorkoutType workoutType in Enum.GetValues(typeof(WorkoutType)))

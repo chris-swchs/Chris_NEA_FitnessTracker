@@ -1,0 +1,96 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Page-1" id="8gRKeiXt9_jcQMOocPhj">
+    <mxGraphModel dx="2562" dy="948" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="W440Jx5EY9iOoAwxsjm0-3" edge="1" parent="1" source="5xWni60XHmQJtddfziNp-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;defaultLabelBackgroundColor=page;" target="W440Jx5EY9iOoAwxsjm0-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5xWni60XHmQJtddfziNp-1" parent="1" style="html=1;dashed=0;whiteSpace=wrap;shape=mxgraph.dfd.start" value="Start" vertex="1">
+          <mxGeometry height="30" width="80" x="-660" y="460" as="geometry" />
+        </mxCell>
+        <mxCell id="W440Jx5EY9iOoAwxsjm0-44" edge="1" parent="1" source="5xWni60XHmQJtddfziNp-18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;defaultLabelBackgroundColor=page;" target="W440Jx5EY9iOoAwxsjm0-17">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5xWni60XHmQJtddfziNp-18" parent="1" style="shape=rhombus;html=1;dashed=0;whiteSpace=wrap;perimeter=rhombusPerimeter;" value="Does a workout schedule for user&amp;nbsp; exist for the current week" vertex="1">
+          <mxGeometry height="175" width="140" x="-475" y="390" as="geometry" />
+        </mxCell>
+        <mxCell id="--CAcEnQ4EnGPEnp02Bm-51" parent="1" style="html=1;dashed=0;whiteSpace=wrap;shape=mxgraph.dfd.start" value="End" vertex="1">
+          <mxGeometry height="30" width="80" x="-450" y="1015" as="geometry" />
+        </mxCell>
+        <mxCell id="--CAcEnQ4EnGPEnp02Bm-55" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Yes" vertex="1">
+          <mxGeometry height="30" width="55" x="-350" y="447.5" as="geometry" />
+        </mxCell>
+        <mxCell id="W440Jx5EY9iOoAwxsjm0-6" edge="1" parent="1" source="W440Jx5EY9iOoAwxsjm0-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;defaultLabelBackgroundColor=page;" target="5xWni60XHmQJtddfziNp-18">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="W440Jx5EY9iOoAwxsjm0-2" parent="1" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;shapeInside=1;fixedSize=1;" value="Retrieve available time slots for user" vertex="1">
+          <mxGeometry height="60" width="120" x="-680" y="530" as="geometry" />
+        </mxCell>
+        <mxCell id="W440Jx5EY9iOoAwxsjm0-8" parent="1" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;shapeInside=1;fixedSize=1;" value="Retrieve workout schedule workout slots that are marked completed" vertex="1">
+          <mxGeometry height="60" width="140" x="-240" y="452.5" as="geometry" />
+        </mxCell>
+        <mxCell id="W440Jx5EY9iOoAwxsjm0-9" edge="1" parent="1" source="5xWni60XHmQJtddfziNp-18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.108;entryY=0.446;entryDx=0;entryDy=0;entryPerimeter=0;defaultLabelBackgroundColor=page;" target="W440Jx5EY9iOoAwxsjm0-8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="W440Jx5EY9iOoAwxsjm0-21" edge="1" parent="1" source="W440Jx5EY9iOoAwxsjm0-40" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;defaultLabelBackgroundColor=page;" target="W440Jx5EY9iOoAwxsjm0-20">
+          <mxGeometry relative="1" x="0.1243" as="geometry">
+            <Array as="points">
+              <mxPoint x="-180" y="825" />
+            </Array>
+            <mxPoint x="-165" y="780.0000000000002" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="W440Jx5EY9iOoAwxsjm0-43" edge="1" parent="1" source="W440Jx5EY9iOoAwxsjm0-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;defaultLabelBackgroundColor=page;" target="W440Jx5EY9iOoAwxsjm0-40">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="W440Jx5EY9iOoAwxsjm0-10" parent="1" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;" value="Perform sub-workout-generation algorithms&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;Acounting for a schedule regeneration&lt;/div&gt;" vertex="1">
+          <mxGeometry height="95" width="160" x="-260" y="630" as="geometry" />
+        </mxCell>
+        <mxCell id="W440Jx5EY9iOoAwxsjm0-45" edge="1" parent="1" source="W440Jx5EY9iOoAwxsjm0-17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;defaultLabelBackgroundColor=page;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-405.20809248554906" y="790" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="W440Jx5EY9iOoAwxsjm0-17" parent="1" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;" value="Perform sub-workout-generation algorithms&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;Acounting for a first-time schedule generaiton&lt;/div&gt;" vertex="1">
+          <mxGeometry height="112.5" width="160" x="-485" y="606.5" as="geometry" />
+        </mxCell>
+        <mxCell id="W440Jx5EY9iOoAwxsjm0-33" edge="1" parent="1" source="W440Jx5EY9iOoAwxsjm0-20" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;defaultLabelBackgroundColor=page;" target="W440Jx5EY9iOoAwxsjm0-32">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="W440Jx5EY9iOoAwxsjm0-20" parent="1" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;shapeInside=1;fixedSize=1;" value="Retrieve new workout objects generated" vertex="1">
+          <mxGeometry height="60" width="140" x="-480" y="795" as="geometry" />
+        </mxCell>
+        <mxCell id="W440Jx5EY9iOoAwxsjm0-34" edge="1" parent="1" source="W440Jx5EY9iOoAwxsjm0-32" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;defaultLabelBackgroundColor=page;" target="--CAcEnQ4EnGPEnp02Bm-51">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="W440Jx5EY9iOoAwxsjm0-32" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Assign new / current workout schedule for user with workout objects" vertex="1">
+          <mxGeometry height="60" width="120" x="-470" y="905" as="geometry" />
+        </mxCell>
+        <mxCell id="W440Jx5EY9iOoAwxsjm0-42" edge="1" parent="1" source="W440Jx5EY9iOoAwxsjm0-37" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;defaultLabelBackgroundColor=page;" target="W440Jx5EY9iOoAwxsjm0-10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="W440Jx5EY9iOoAwxsjm0-37" parent="1" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;shapeInside=1;fixedSize=1;" value="Retrieve Regeneration Index" vertex="1">
+          <mxGeometry height="60" width="140" x="-250" y="546.5" as="geometry" />
+        </mxCell>
+        <mxCell id="W440Jx5EY9iOoAwxsjm0-38" edge="1" parent="1" source="W440Jx5EY9iOoAwxsjm0-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.56;entryY=0.051;entryDx=0;entryDy=0;entryPerimeter=0;defaultLabelBackgroundColor=page;" target="W440Jx5EY9iOoAwxsjm0-37">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="W440Jx5EY9iOoAwxsjm0-41" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;defaultLabelBackgroundColor=page;" target="W440Jx5EY9iOoAwxsjm0-40" value="">
+          <mxGeometry relative="1" x="0.1909" as="geometry">
+            <Array as="points" />
+            <mxPoint x="-165" y="780.0000000000002" as="sourcePoint" />
+            <mxPoint x="-350" y="825" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="W440Jx5EY9iOoAwxsjm0-40" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Regeneraiton Index += 1" vertex="1">
+          <mxGeometry height="60" width="120" x="-240" y="750" as="geometry" />
+        </mxCell>
+        <mxCell id="W440Jx5EY9iOoAwxsjm0-46" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="No" vertex="1">
+          <mxGeometry height="30" width="55" x="-410" y="565" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
