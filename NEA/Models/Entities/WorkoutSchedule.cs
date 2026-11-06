@@ -12,10 +12,10 @@ namespace NEA.Models.Entities
     {
         public Workout[] Workouts { get; private set; }
         public DateTime DateCreated { get; private set; }
-        public WorkoutSchedule(Workout[] workouts, DateTime date)
+        public WorkoutSchedule(Workout[] workouts, DateTime dateCreated)
         {
             Workouts = workouts;
-            Date = date;
+            DateCreated = dateCreated;
 
         }
         public void UpdateWorkouts(Workout[] workouts)
@@ -26,6 +26,19 @@ namespace NEA.Models.Entities
         public Workout[] GetWorkouts()
         {
             return Workouts;
+        }
+
+        public DateTime GetLatestCompletedWorkout()
+        {
+            DateTime latestDate = DateTime.MinValue;
+            foreach (var workout in Workouts)
+            {
+                if (workout.Date > latestDate || workout.Completed) 
+                {
+                    latestDate = workout.Date;
+                }
+            }
+            return latestDate;
         }
     }
 }

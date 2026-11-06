@@ -1,0 +1,153 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Page-1" id="8gRKeiXt9_jcQMOocPhj">
+    <mxGraphModel dx="1567" dy="1488" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="5xWni60XHmQJtddfziNp-24" edge="1" parent="1" source="5xWni60XHmQJtddfziNp-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-185" y="359" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5xWni60XHmQJtddfziNp-1" parent="1" style="html=1;dashed=0;whiteSpace=wrap;shape=mxgraph.dfd.start" value="Start" vertex="1">
+          <mxGeometry height="30" width="80" x="-225" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="--CAcEnQ4EnGPEnp02Bm-54" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="5xWni60XHmQJtddfziNp-18">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-185" y="424" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="d-wVuZfx_X4sAPioJWDg-2" edge="1" parent="1" source="5xWni60XHmQJtddfziNp-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;defaultLabelBackgroundColor=page;" target="d-wVuZfx_X4sAPioJWDg-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5xWni60XHmQJtddfziNp-4" parent="1" style="html=1;dashed=0;whiteSpace=wrap;" value="Declare array (WorkoutType) Scores with length WorkoutTypes" vertex="1">
+          <mxGeometry height="70" width="100" x="-52" y="335" as="geometry" />
+        </mxCell>
+        <mxCell id="5xWni60XHmQJtddfziNp-13" edge="1" parent="1" source="5xWni60XHmQJtddfziNp-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="210" y="423" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="d-wVuZfx_X4sAPioJWDg-20" edge="1" parent="1" source="5xWni60XHmQJtddfziNp-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;defaultLabelBackgroundColor=page;" target="--CAcEnQ4EnGPEnp02Bm-50">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5xWni60XHmQJtddfziNp-10" parent="1" style="shape=rhombus;html=1;dashed=0;whiteSpace=wrap;perimeter=rhombusPerimeter;" value="More&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&amp;nbsp;workout&amp;nbsp;&lt;/span&gt;&lt;div&gt;&lt;div&gt;types remaining?&lt;/div&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="85" width="160" x="130" y="300" as="geometry" />
+        </mxCell>
+        <mxCell id="--CAcEnQ4EnGPEnp02Bm-3" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="d-wVuZfx_X4sAPioJWDg-7" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="210" y="473" as="sourcePoint" />
+            <mxPoint x="210" y="510" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="--CAcEnQ4EnGPEnp02Bm-52" edge="1" parent="1" source="5xWni60XHmQJtddfziNp-18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="--CAcEnQ4EnGPEnp02Bm-51">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5xWni60XHmQJtddfziNp-18" parent="1" style="shape=rhombus;html=1;dashed=0;whiteSpace=wrap;perimeter=rhombusPerimeter;" value="Any workout slots remaining?" vertex="1">
+          <mxGeometry height="85" width="130" x="-250" y="473" as="geometry" />
+        </mxCell>
+        <mxCell id="d-wVuZfx_X4sAPioJWDg-23" edge="1" parent="1" source="--CAcEnQ4EnGPEnp02Bm-50" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;defaultLabelBackgroundColor=page;" target="5xWni60XHmQJtddfziNp-18">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="590" y="342.5" />
+              <mxPoint x="590" y="740" />
+              <mxPoint x="-270" y="740" />
+              <mxPoint x="-270" y="515.5" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="--CAcEnQ4EnGPEnp02Bm-50" parent="1" style="html=1;dashed=0;whiteSpace=wrap;" value="Set WorkoutType for the slot equal to HighestScoreWorkoutType" vertex="1">
+          <mxGeometry height="50" width="220" x="350" y="317.5" as="geometry" />
+        </mxCell>
+        <mxCell id="--CAcEnQ4EnGPEnp02Bm-51" parent="1" style="html=1;dashed=0;whiteSpace=wrap;shape=mxgraph.dfd.start" value="End" vertex="1">
+          <mxGeometry height="30" width="80" x="-225" y="603" as="geometry" />
+        </mxCell>
+        <mxCell id="--CAcEnQ4EnGPEnp02Bm-53" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="No" vertex="1">
+          <mxGeometry height="30" width="55" x="-200" y="566" as="geometry" />
+        </mxCell>
+        <mxCell id="d-wVuZfx_X4sAPioJWDg-5" edge="1" parent="1" source="--CAcEnQ4EnGPEnp02Bm-55" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.25;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;defaultLabelBackgroundColor=page;" target="5xWni60XHmQJtddfziNp-4">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-100" y="515" />
+              <mxPoint x="-100" y="315" />
+              <mxPoint x="-2" y="315" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="--CAcEnQ4EnGPEnp02Bm-55" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Yes" vertex="1">
+          <mxGeometry height="30" width="55" x="-137" y="515" as="geometry" />
+        </mxCell>
+        <mxCell id="--CAcEnQ4EnGPEnp02Bm-56" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Yes" vertex="1">
+          <mxGeometry height="30" width="55" x="205" y="385" as="geometry" />
+        </mxCell>
+        <mxCell id="--CAcEnQ4EnGPEnp02Bm-58" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="No" vertex="1">
+          <mxGeometry height="30" width="55" x="290" y="317.5" as="geometry" />
+        </mxCell>
+        <mxCell id="d-wVuZfx_X4sAPioJWDg-9" edge="1" parent="1" source="d-wVuZfx_X4sAPioJWDg-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;defaultLabelBackgroundColor=page;" target="d-wVuZfx_X4sAPioJWDg-8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d-wVuZfx_X4sAPioJWDg-1" parent="1" style="html=1;dashed=0;whiteSpace=wrap;" value="Declare (Double) HighestScore = -1000" vertex="1">
+          <mxGeometry height="50" width="100" x="-52" y="437.5" as="geometry" />
+        </mxCell>
+        <mxCell id="d-wVuZfx_X4sAPioJWDg-12" edge="1" parent="1" source="d-wVuZfx_X4sAPioJWDg-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;defaultLabelBackgroundColor=page;" target="5xWni60XHmQJtddfziNp-10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d-wVuZfx_X4sAPioJWDg-14" edge="1" parent="1" source="d-wVuZfx_X4sAPioJWDg-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;defaultLabelBackgroundColor=page;" target="d-wVuZfx_X4sAPioJWDg-13">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d-wVuZfx_X4sAPioJWDg-7" parent="1" style="shape=rhombus;html=1;dashed=0;whiteSpace=wrap;perimeter=rhombusPerimeter;" value="Is Score bigger&lt;div&gt;&amp;nbsp;than current&amp;nbsp;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(#000000, var(--ge-light-color, #ffffff));&quot;&gt;highest score?&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="98.5" width="130" x="145" y="502" as="geometry" />
+        </mxCell>
+        <mxCell id="d-wVuZfx_X4sAPioJWDg-8" parent="1" style="html=1;dashed=0;whiteSpace=wrap;" value="Declare WorkoutType HighestScoreWorkoutType" vertex="1">
+          <mxGeometry height="50" width="160" x="-82" y="540" as="geometry" />
+        </mxCell>
+        <mxCell id="d-wVuZfx_X4sAPioJWDg-17" edge="1" parent="1" source="d-wVuZfx_X4sAPioJWDg-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;defaultLabelBackgroundColor=page;" target="d-wVuZfx_X4sAPioJWDg-15">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="d-wVuZfx_X4sAPioJWDg-13" parent="1" style="html=1;dashed=0;whiteSpace=wrap;" value="Set HighestScore = Score" vertex="1">
+          <mxGeometry height="50" width="100" x="335" y="515" as="geometry" />
+        </mxCell>
+        <mxCell id="d-wVuZfx_X4sAPioJWDg-18" edge="1" parent="1" source="d-wVuZfx_X4sAPioJWDg-15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;defaultLabelBackgroundColor=page;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="110" y="550" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="d-wVuZfx_X4sAPioJWDg-15" parent="1" style="html=1;dashed=0;whiteSpace=wrap;" value="Set&amp;nbsp;&lt;div&gt;HighestScoreWorkoutType&lt;/div&gt;&lt;div&gt;= current WorkoutType&lt;/div&gt;" vertex="1">
+          <mxGeometry height="50" width="150" x="310" y="650" as="geometry" />
+        </mxCell>
+        <mxCell id="d-wVuZfx_X4sAPioJWDg-24" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="No" vertex="1">
+          <mxGeometry height="30" width="55" x="100" y="528" as="geometry" />
+        </mxCell>
+        <mxCell id="d-wVuZfx_X4sAPioJWDg-25" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Yes" vertex="1">
+          <mxGeometry height="30" width="55" x="230" y="596" as="geometry" />
+        </mxCell>
+        <mxCell id="frWKLMYuFmLKY9U4-6df-2" parent="1" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;shapeInside=1;fixedSize=1;" value="Retrieve user profile settings and workout history" vertex="1">
+          <mxGeometry height="60" width="120" x="-245" y="362" as="geometry" />
+        </mxCell>
+        <mxCell id="frWKLMYuFmLKY9U4-6df-3" parent="1" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;" value="Perform score calculation" vertex="1">
+          <mxGeometry height="60" width="120" x="156" y="415" as="geometry" />
+        </mxCell>
+        <mxCell id="frWKLMYuFmLKY9U4-6df-5" edge="1" parent="1" source="frWKLMYuFmLKY9U4-6df-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-17" y="-121" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="frWKLMYuFmLKY9U4-6df-6" parent="1" style="html=1;dashed=0;whiteSpace=wrap;shape=mxgraph.dfd.start" value="Start" vertex="1">
+          <mxGeometry height="30" width="80" x="-57" y="-200" as="geometry" />
+        </mxCell>
+        <mxCell id="frWKLMYuFmLKY9U4-6df-8" parent="1" style="shape=rhombus;html=1;dashed=0;whiteSpace=wrap;perimeter=rhombusPerimeter;" value="Loop through each workout" vertex="1">
+          <mxGeometry height="85" width="130" x="-87" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="frWKLMYuFmLKY9U4-6df-12" edge="1" parent="1" source="frWKLMYuFmLKY9U4-6df-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;defaultLabelBackgroundColor=page;" target="frWKLMYuFmLKY9U4-6df-10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="frWKLMYuFmLKY9U4-6df-9" parent="1" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;shapeInside=1;fixedSize=1;" value="Retrieve user profile settings and workout history" vertex="1">
+          <mxGeometry height="60" width="120" x="-77" y="-140" as="geometry" />
+        </mxCell>
+        <mxCell id="frWKLMYuFmLKY9U4-6df-10" parent="1" style="shape=rhombus;html=1;dashed=0;whiteSpace=wrap;perimeter=rhombusPerimeter;" value="Does a&amp;nbsp; workout schedule for the current week already exist" vertex="1">
+          <mxGeometry height="120" width="112" x="-73" y="-45" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

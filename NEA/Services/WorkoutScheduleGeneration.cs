@@ -15,25 +15,45 @@ namespace NEA.Services
         {
             db = DB;
         }
-        public static void GenerateWorkoutSchedule(User user, Dictionary<DateTime, WorkoutType> availableTimes)
-        {  
-            // TO DO: Implement function which determines which available days should have a workout placed in it
-            Dictionary<DateTime, WorkoutType> workoutSlots = availableTimes;
 
-            WorkoutSchedule currentWorkoutSchedule = user.CurrentWorkoutSchedule != null ? user.CurrentWorkoutSchedule : null; ;
+        private static Dictionary<DateTime, WorkoutType> CalculateTimes(WorkoutSchedule workoutSchedule, Dictionary<DateTime, WorkoutType> availableTimes)
+        {
+            DateTime latestDate = workoutSchedule.GetLatestCompletedWorkout();
 
-            if (currentWorkoutSchedule != null)
+            if (latestDate != DateTime.MinValue)
             {
-                currentWorkoutSchedule = user.CurrentWorkoutSchedule;
-                foreach(var workout in currentWorkoutSchedule.Workouts)
+                foreach (var timeSlot in availableTimes)
                 {
-                    if (workout.Completed)
+                    if (timeSlot.Key <= latestDate)
                     {
 
                     }
                 }
             }
-            workoutSlots = WorkoutTypeSelection.RunAlgorithm(user, workoutSlots);
+        }
+
+        public static void GenerateWorkoutSchedule(User user, Dictionary<DateTime, WorkoutType> availableTimes)
+        {
+            // TO DO: Implement function which determines which available days should have a workout placed in it
+            Dictionary<DateTime, WorkoutType> workoutSlots = availableTimes;
+
+            WorkoutSchedule currentWorkoutSchedule = user.CurrentWorkoutSchedule != null ? user.CurrentWorkoutSchedule : null; ;
+            Dictionary<DateTime, WorkoutType> completedWorkoutSlots;
+
+            if (currentWorkoutSchedule != null)
+            {
+                currentWorkoutSchedule = user.CurrentWorkoutSchedule;
+                completedWorkoutSlots = new Dictionary<DateTime, WorkoutType>();
+
+                foreach (var workout in currentWorkoutSchedule.Workouts)
+                {
+                    if (workout.Completed)
+                    {
+                        completedWorkoutSlots[workout.Date] = workout.Workout_WorkoutType;
+                    }
+                }
+            }
+            workoutSlots = WorkoutTypeSelection.RunAlgorithm(user, workoutSlots, completedWorkoutSlots);
         }
     }
 }

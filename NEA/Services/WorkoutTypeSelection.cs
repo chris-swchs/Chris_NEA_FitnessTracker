@@ -13,7 +13,7 @@ namespace NEA.Services
         {
             db = DB;
         }
-        public static Dictionary<DateTime, WorkoutType> RunAlgorithm(User user, Dictionary<DateTime, WorkoutType> WorkoutSlots)
+        public static Dictionary<DateTime, WorkoutType> RunAlgorithm(User user, Dictionary<DateTime, WorkoutType> WorkoutSlots, Dictionary<DateTime, WorkoutType> CompletedWorkoutSlots)
         {
             // Dates of workouts have been defined, but the workout type assigned to the date has not
             Dictionary<DateTime, WorkoutType> assignedWorkouts = new Dictionary<DateTime, WorkoutType>();
