@@ -20,5 +20,11 @@ namespace NEA.Models.Entities
         public Difficulty PreferredWorkoutDifficulty { get; set; }
         public Frequency CardioPreference { get; set; }
         public MainMuscleGroup MainMuscleGroupPriority { get; set; }
+        public int RegenerationCount { get; set; }
+
+        public UserSettings()
+        {
+            RegenerationCount = 0;
+        }
     }
 }

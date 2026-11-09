@@ -8,12 +8,16 @@ namespace NEA.Services
     public static class WorkoutTypeSelection
     {
         private static DatabaseManager db;
+        private static readonly Random random = new Random();
+
+        // Constants
+        const double MinimumScoreForVariance = 2.0;
 
         public static void SendDatabase(DatabaseManager DB)
         {
             db = DB;
         }
-        public static Dictionary<DateTime, WorkoutType> RunAlgorithm(User user, Dictionary<DateTime, WorkoutType> WorkoutSlots, Dictionary<DateTime, WorkoutType> CompletedWorkoutSlots)
+        public static Dictionary<DateTime, WorkoutType> RunAlgorithm(User user, Dictionary<DateTime, WorkoutType> WorkoutSlots, Dictionary<DateTime, WorkoutType> previousScheduleSlots, double maximumVariance)
         {
             // Dates of workouts have been defined, but the workout type assigned to the date has not
             Dictionary<DateTime, WorkoutType> assignedWorkouts = new Dictionary<DateTime, WorkoutType>();
@@ -22,18 +26,18 @@ namespace NEA.Services
             foreach (var slot in WorkoutSlots)
             {
                 Console.WriteLine(slot.Key);
-                double HighestScore = -1000;
+                double HighestScore = Double.NegativeInfinity;
                 // Cant be set to null - just incase (score > HighScore) condition is never met
                 WorkoutType HighestScoreWorkoutType = WorkoutType.Push;
                 foreach (WorkoutType workoutType in Enum.GetValues(typeof(WorkoutType)))
                 {
-                    double score = CalculateWorkoutTypeScore(workoutType, user, assignedWorkouts, slot);
+                    double score = CalculateWorkoutTypeScore(workoutType, user, assignedWorkouts, previousScheduleSlots, slot, maximumVariance);
                     if (score > HighestScore)
                     {
                         HighestScoreWorkoutType = workoutType;
                         HighestScore = score;
                     }
-                    // Console.WriteLine($"{workoutType} {score}");
+                     Console.WriteLine($"{workoutType} {score}");
                 }
                 assignedWorkouts[slot.Key] = HighestScoreWorkoutType;
             }
@@ -43,7 +47,43 @@ namespace NEA.Services
             }
             return assignedWorkouts;
         }
-        private static double CalculateWorkoutTypeScore(WorkoutType workoutType, User user, Dictionary<DateTime, WorkoutType> assignedWorkouts, KeyValuePair<DateTime, WorkoutType> currentSlot)
+
+
+        private static double CalculatePreviousSchedulePenalty(WorkoutType workoutType, Dictionary<DateTime, WorkoutType> previousScheduleSlots)
+        {
+            if (previousScheduleSlots == null)
+                return 0.0;
+
+            int? closestDays = null;
+            DateTime currentDate = DateTime.Now;
+
+            foreach (var previousWorkout in previousScheduleSlots)
+            {
+                if (previousWorkout.Key.Date <= currentDate.Date)
+                    continue;
+
+                if (previousWorkout.Value != workoutType)
+                    continue;
+
+                int days = (previousWorkout.Key.Date - currentDate.Date).Days;
+
+                if (!closestDays.HasValue || days < closestDays.Value)
+                {
+                    closestDays = days;
+                }
+            }
+
+            if (!closestDays.HasValue)
+                return 0.0;
+
+            const double decayRate = 0.5;
+
+            return Math.Exp(-decayRate * closestDays.Value);
+        }
+
+        private static double CalculateWorkoutTypeScore(WorkoutType workoutType, User user, 
+            Dictionary<DateTime, WorkoutType> assignedWorkouts, Dictionary<DateTime, WorkoutType> previousScheduleSlots,
+            KeyValuePair<DateTime, WorkoutType> currentSlot, double maximumVariance)
         {
             UserSettings settings = user.GetSettings();
             
@@ -74,11 +114,16 @@ namespace NEA.Services
                     ? Math.Exp(-0.5 * days.Value)
                     : 0.0;
 
-            Func<double, double, double, double, double, double> CalculateScore = (Gp, Gs, M, C, R) =>
-                (4.0 * Gp) + (4.0 * Gs) + (3.0 * M) + (2.0 * C) - (4.0 * R);
+            Func<double, double, double> CalculateVariation =
+                (variation, randomValue) =>
+                      (randomValue * 2.0 - 1.0) * variation;
+
+            Func<double, double, double, double, double, double, double> CalculateScore = (Gp, Gs, M, C, R, P) =>
+                (4.0 * Gp) + (4.0 * Gs) + (3.0 * M) + (2.0 * C) - (4.0 * R) - (3.0 * P);
 
 
-            return CalculateScore(PrimaryGoalCompatibility, SecondaryGoalCompatibility, MuscleGroupCompatility, CardioPreferenceCompatibility, CalculateRecenency(DaysSinceLastUsed));
+            double score =  CalculateScore(PrimaryGoalCompatibility, SecondaryGoalCompatibility, MuscleGroupCompatility, CardioPreferenceCompatibility, CalculateRecenency(DaysSinceLastUsed), CalculatePreviousSchedulePenalty(workoutType,  previousScheduleSlots));
+            return score > MinimumScoreForVariance? (score + CalculateVariation(maximumVariance, random.NextDouble())) : MinimumScoreForVariance;
         }
     }
 }

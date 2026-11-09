@@ -24,13 +24,12 @@ namespace NEA
 
             CustomLinkedList<string> list = new CustomLinkedList<string>("John", "James", "Harry");
 
-            WorkoutTypeSelection.SendDatabase(DB);
+            ApplicationClock.SendDatabase(DB);
 
             list.Append("5");
             list.Append("10");
             list.Prepend("20");
 
-            Console.WriteLine("hello");
 
             list.PrintList();
 
@@ -136,13 +135,14 @@ namespace NEA
                 { new DateTime(2026, 11, 9), default(WorkoutType) }
                };
 
-            WorkoutScheduleGeneration.GenerateWorkoutSchedule(strengthUser, workoutSlots);
-
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
 
-
+            while (true)
+            {
+                WorkoutScheduleGeneration.GenerateWorkoutSchedule(strengthUser, workoutSlots);
+            }
         }
     }
 }

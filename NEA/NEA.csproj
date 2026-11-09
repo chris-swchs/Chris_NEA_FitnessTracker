@@ -113,6 +113,7 @@
     <Compile Include="Models\Entities\UserSettings.cs" />
     <Compile Include="Models\Entities\TimedExercise.cs" />
     <Compile Include="Models\Entities\User.cs" />
+    <Compile Include="Models\Entities\ApplicationClock.cs" />
     <Compile Include="Models\LinkedLists\CustomLinkedList.cs" />
     <Compile Include="Models\LinkedLists\Node.cs" />
     <Compile Include="Program.cs" />

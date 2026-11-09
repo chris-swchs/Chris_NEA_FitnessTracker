@@ -226,7 +226,7 @@ namespace NEA
         //Retrieves an array of elements of data within a field for all records with a specific attribute
         private string[] GetMultiValuesInFieldFromKey(string table, string pkFieldName, string keyAttribute, string field)
         {
-            CustomLinkedList cells = new LinkedList();
+            CustomLinkedList<string> cells = new CustomLinkedList<string>();
 
             using (var connection = new SqliteConnection(connectionString))
             {
@@ -320,12 +320,12 @@ namespace NEA
 
         public ExerciseType GetExerciseType(string ExerciseID)
         {
-            return (ExerciseType)EnumDefinitions.Parse(typeof(ExerciseType), GetFieldFromKey<string>("Exercise", "ExerciseID", ExerciseID, "ExerciseType"));
+            return (ExerciseType)Enum.Parse(typeof(ExerciseType), GetFieldFromKey<string>("Exercise", "ExerciseID", ExerciseID, "ExerciseType"));
         }
 
         public MuscleGroup GetExerciseTargetMuscle(string ExerciseID)
         {
-            return (MuscleGroup)EnumDefinitions.Parse(typeof(MuscleGroup), GetFieldFromKey<string>("Exercise", "ExerciseID", ExerciseID, "TargetMuscle"));
+            return (MuscleGroup)Enum.Parse(typeof(MuscleGroup), GetFieldFromKey<string>("Exercise", "ExerciseID", ExerciseID, "TargetMuscle"));
         }
 
         public string GetExerciseDetails(string ExerciseID)

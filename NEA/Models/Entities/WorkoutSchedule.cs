@@ -22,7 +22,7 @@ namespace NEA.Models.Entities
         {
             Workouts = workouts;
         }
-        
+
         public Workout[] GetWorkouts()
         {
             return Workouts;
@@ -33,12 +33,27 @@ namespace NEA.Models.Entities
             DateTime latestDate = DateTime.MinValue;
             foreach (var workout in Workouts)
             {
-                if (workout.Date > latestDate || workout.Completed) 
+                if (workout.Date > latestDate || workout.Completed)
                 {
                     latestDate = workout.Date;
                 }
             }
             return latestDate;
+        }
+
+        public Dictionary<DateTime, WorkoutType> ConvertToWorkoutSlots()
+        {
+            Dictionary<DateTime, WorkoutType> completedWorkoutSlots = new Dictionary<DateTime, WorkoutType>();
+
+            foreach (var workout in Workouts)
+            {
+                if (workout.Completed)
+                {
+                    completedWorkoutSlots[workout.Date] = workout.Workout_WorkoutType;
+                }
+            }
+
+            return completedWorkoutSlots;
         }
     }
 }

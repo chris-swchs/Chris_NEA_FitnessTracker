@@ -40,7 +40,8 @@ namespace NEA
         Triceps,
         Forearms,
         Back,
-        Legs
+        Legs,
+        Core
     }
 
     //Contains list of the possible sets of exercise types
@@ -110,14 +111,39 @@ namespace NEA
     public static class EnumDefinitions
     {
         // TO DO - Make it return linked  list of muscle groups
-        public static int GetWorkoutTypeMuscleGroups(WorkoutType workoutType)
+        public static MainMuscleGroup[] GetWorkoutTypeMuscleGroups(WorkoutType workoutType)
         {
             switch (workoutType)
             {
+                case WorkoutType.FullBody:
+                    return new MainMuscleGroup[] { MainMuscleGroup.Chest, MainMuscleGroup.Shoulders, MainMuscleGroup.Biceps, MainMuscleGroup.Triceps, MainMuscleGroup.Forearms, MainMuscleGroup.Back, MainMuscleGroup.Legs,  MainMuscleGroup.Core };
+
+                case WorkoutType.UpperBody:
+                    return new MainMuscleGroup[] { MainMuscleGroup.Chest, MainMuscleGroup.Shoulders, MainMuscleGroup.Biceps, MainMuscleGroup.Triceps, MainMuscleGroup.Forearms, MainMuscleGroup.Back, MainMuscleGroup.Core };
+
+                case WorkoutType.LowerBody:
+                    return new MainMuscleGroup[] { MainMuscleGroup.Legs };
+
+                case WorkoutType.Push:
+                    return new MainMuscleGroup[] { MainMuscleGroup.Chest, MainMuscleGroup.Shoulders, MainMuscleGroup.Triceps };
+
                 case WorkoutType.Pull:
-                    return 999;
+                    return new MainMuscleGroup[] { MainMuscleGroup.Back, MainMuscleGroup.Biceps, MainMuscleGroup.Forearms, MainMuscleGroup.Shoulders };
+
+                case WorkoutType.Legs:
+                    return new MainMuscleGroup[] { MainMuscleGroup.Legs };
+
+                case WorkoutType.Core:
+                    return new MainMuscleGroup[] { MainMuscleGroup.Core };
+
+                case WorkoutType.Cardio:
+                    return new MainMuscleGroup[] { MainMuscleGroup.Legs };
+
+                case WorkoutType.Mobility:
+                    return new MainMuscleGroup[] { MainMuscleGroup.Chest, MainMuscleGroup.Shoulders, MainMuscleGroup.Biceps, MainMuscleGroup.Triceps, MainMuscleGroup.Forearms, MainMuscleGroup.Back, MainMuscleGroup.Legs, MainMuscleGroup.Core };
+
                 default:
-                    return 3;
+                    return new MainMuscleGroup[] { };
             }
         }
     }
