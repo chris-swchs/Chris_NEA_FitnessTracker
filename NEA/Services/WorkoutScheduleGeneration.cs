@@ -36,6 +36,18 @@ namespace NEA.Services
             return NewTimes;
         }
 
+
+        private static void RemoveUncompletedWorkoutsFromDB(WorkoutSchedule workoutSchedule, User  user) 
+        {
+            foreach (var workout in workoutSchedule.GetWorkouts())
+            {
+                if (!workout.Completed)  
+                {
+                    db.RemoveWorkout(workout, user);
+                }
+            }   
+        }
+
         public static void GenerateWorkoutSchedule(User user, Dictionary<DateTime, WorkoutType> availableTimes)
         {
             UserSettings userSettings = user.GetSettings();
@@ -51,7 +63,7 @@ namespace NEA.Services
                 currentWorkoutSchedule = user.CurrentWorkoutSchedule;
                 completedWorkoutSlots = new Dictionary<DateTime, WorkoutType>();
                           
-                foreach (var workout in currentWorkoutSchedule.Workouts)
+                foreach (var workout in currentWorkoutSchedule.GetWorkouts())
                 {
                     if (workout.Completed)
                     {
@@ -62,17 +74,23 @@ namespace NEA.Services
             workoutSlots = WorkoutTypeSelection.RunAlgorithm(user, workoutSlots, completedWorkoutSlots, maximumVariance);
             userSettings.RegenerationCount += 1;
             user.UpdateSettings(userSettings);
+
             Workout[] workouts = new Workout[workoutSlots.Count];
 
             foreach (var (slot, index) in workoutSlots.Select((value, i) => (value, i)))
             {
-                workouts[i].
+                // Consider whether setting completed value is necessary
+                workouts[index] = new Workout(slot.Value, slot.Key, null, false);
             }
 
-            WorkoutSchedule workoutSchedule = new WorkoutSchedule();
-            foreach (var workout in workoutSlots)
-            {
-                db.AddWorkout(user.UserID, GetCurrentDate(), false, );
+            WorkoutSchedule workoutSchedule = new WorkoutSchedule(workouts, GetCurrentDate());
+            user.UpdateWorkoutSchedule(workoutSchedule);
+
+            RemoveUncompletedWorkoutsFromDB(currentWorkoutSchedule, user);
+
+            foreach (var workout in workoutSchedule.GetWorkouts())
+            {   // Consider whether setting completed value is necessary
+                db.AddWorkout(user.UserID, workout.Date, false, workout.Workout_WorkoutType);
             }
         }
     }

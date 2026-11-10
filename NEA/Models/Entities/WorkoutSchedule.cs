@@ -10,7 +10,7 @@ namespace NEA.Models.Entities
 {
     public class WorkoutSchedule
     {
-        public Workout[] Workouts { get; private set; }
+        private Workout[] Workouts; 
         public DateTime DateCreated { get; private set; }
         public WorkoutSchedule(Workout[] workouts, DateTime dateCreated)
         {

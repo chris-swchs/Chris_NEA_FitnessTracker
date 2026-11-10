@@ -8,7 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace NEA.Models.Entities
-{
+{  
+    // Workout automatically set as completed at end of day - otherwise when user marks it as completed themselves
     public class Workout
     {
         public WorkoutType Workout_WorkoutType { get; private set; }

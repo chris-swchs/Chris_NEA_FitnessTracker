@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace NEA.Models.Entities
 {
+    // Change accessibility of certain parameters e.g. password
     public class User
     {
         public string UserID { get; private set; }

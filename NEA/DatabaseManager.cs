@@ -483,7 +483,7 @@ namespace NEA
                 connection.Open();
 
                 string sql = @"
-                REMOVE FROM UserRepBasedSetTarget WHERE UserID = @UserID AND ExerciseID = @Exercise";
+                DELETE FROM UserRepBasedSetTarget WHERE UserID = @UserID AND ExerciseID = @Exercise";
 
                 using (var command = new SqliteCommand(sql, connection))
                 {
@@ -611,6 +611,37 @@ namespace NEA
             }
         }
 
+        public void RemoveWorkout(Workout workout, User user)
+        {
+           string workoutDate = Convert.ToString(workout.Date);
+           string userID = user.UserID;
+           int WorkoutID = Convert.ToInt16(GetKeyFromTwoFields("Workout", "WorkoutID", "Date", workoutDate, "UserID", userID));
+
+            using (SqliteConnection connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
+
+                using (SqliteTransaction transaction = connection.BeginTransaction())
+                {
+                    string query = @"                      
+                    DELETE FROM WorkoutRepBasedSet WHERE WorkoutID = @WorkoutID;
+
+                    DELETE FROM WorkoutTimedExercise WHERE WorkoutID = @WorkoutID;
+                
+                    DELETE FROM Workout WHERE WorkoutID = @WorkoutID;
+                    ";
+
+                    using (SqliteCommand command = new SqliteCommand(query, connection, transaction))
+                    {
+                        command.Parameters.AddWithValue("@WorkoutID", WorkoutID);
+                        command.ExecuteNonQuery();
+                    }
+
+                    transaction.Commit();
+                }
+            }
+        }
+
         public DateTime? GetMostRecentTimedExerciseDate(string userID, Exercise exercise)
         {
             bool repBased = false;
@@ -699,10 +730,10 @@ namespace NEA
                 using (SqliteTransaction transaction = connection.BeginTransaction())
                 {
                     string query = @"
-                INSERT INTO WorkoutRepBasedSet
-                (WorkoutID, ExerciseID, TargetWeight, TargetReps, ExerciseOrder,  RestDuration, Completed) 
-                VALUES
-                (@WorkoutID, @ExerciseID, @TargetWeight, @TargetReps, @ExerciseOrder, @RestDuration, @Completed);";
+                    INSERT INTO WorkoutRepBasedSet
+                    (WorkoutID, ExerciseID, TargetWeight, TargetReps, ExerciseOrder,  RestDuration, Completed) 
+                    VALUES
+                    (@WorkoutID, @ExerciseID, @TargetWeight, @TargetReps, @ExerciseOrder, @RestDuration, @Completed);";
 
                     using (SqliteCommand command =
                         new SqliteCommand(query, connection, transaction))
