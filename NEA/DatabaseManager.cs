@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
@@ -152,6 +153,10 @@ namespace NEA
             return DateTime.ParseExact(String.ToString(), "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
         }
 
+        private string DateToString(DateTime Date)
+        {
+            return Date.ToString("yyyy-MM-DD HH:mm:ss", CultureInfo.InvariantCulture);
+        }
 
         // GENERALISED DATABASE FUNCTIONS
 
@@ -256,6 +261,91 @@ namespace NEA
             }
         }
 
+        public bool RecordExistsFromOneField(string tableName, string fieldName, string fieldValue) 
+        {
+            using (var connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
+
+                string sql = $@"
+                    SELECT 1
+                    FROM {tableName}
+                    WHERE {fieldName} = @FieldValue
+                    LIMIT 1;";
+
+                using (var command = new SqliteCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("@FieldValue", fieldValue);
+
+                    return command.ExecuteScalar() != null;
+                }
+            }
+        }
+
+        public bool RecordExistsFrom2Fields(string tableName, string fieldName1, string fieldValue1, string fieldName2, string fieldValue2)
+        {
+            using (var connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
+
+                string sql = $@"
+                    SELECT 1
+                    FROM {tableName}
+                    WHERE {fieldName1} = @FieldValue1
+                    AND {fieldName2} = @FieldValue2
+                    LIMIT 1;";
+
+                using (var command = new SqliteCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("@FieldValue1", fieldValue1);
+                    command.Parameters.AddWithValue("@FieldValue2", fieldValue2);
+
+                    return command.ExecuteScalar() != null;
+                }
+            }
+        }
+
+        // USER METHODS
+        public void AddUser(string UserID, string email, string PasswordHash, DateTime DateCreated)
+        {
+            string sqlDateText = DateToString(DateCreated);
+            using (var connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
+
+                string sql = @"
+
+                INSERT INTO User
+                (UserID, Email, PasswordHash, DateCreated)
+                VALUES
+                 (@UserID, @Email, @PasswordHash, @DateCreated);";
+
+                using (var command = new SqliteCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("@UserID", UserID);
+                    command.Parameters.AddWithValue("@Email", email);
+                    command.Parameters.AddWithValue("@PasswordHash", PasswordHash);
+                    command.Parameters.AddWithValue("@DateCreated", sqlDateText);
+
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public bool FindUser(string username)
+        {
+            return RecordExistsFromOneField("User", "UserID", username);
+        }
+
+        public bool FindEmailWithPassword(string email, string password)
+        {
+            return RecordExistsFrom2Fields("User", "Email", email, "PasswordHash", password);
+        }
+
+        public bool FindUsernameWithPassword(string username, string password)
+        {
+            return RecordExistsFrom2Fields("User", "UserID", username, "PasswordHash", password);
+        }
 
         // EXERCISE METHODS
 
@@ -586,7 +676,7 @@ namespace NEA
 
         public void AddWorkout(string UserID, DateTime Date, bool Completed, WorkoutType workoutType)
         {
-            string sqlDateText = Date.ToString("yyyy-MM-DD HH:mm:ss", CultureInfo.InvariantCulture);
+            string sqlDateText = DateToString(Date);
             int Completed_Int = Completed ? 1 : 0;
             using (var connection = new SqliteConnection(connectionString))
             {

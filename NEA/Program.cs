@@ -25,6 +25,7 @@ namespace NEA
             CustomLinkedList<string> list = new CustomLinkedList<string>("John", "James", "Harry");
 
             WorkoutScheduleGeneration.SendDatabase(DB);
+            AcountManager.SendDatabase(DB);
 
             list.Append("5");
             list.Append("10");
@@ -137,7 +138,7 @@ namespace NEA
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new SignupForm());
+            Application.Run(new StartupForm());
 
             while (true)
             {
