@@ -149,13 +149,13 @@ namespace NEA
         }
         //UTILITY FUNCTIONS
         private DateTime StringToDate(object String)
-        {
-            return DateTime.ParseExact(String.ToString(), "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
+        {  
+            return DateTime.ParseExact(String.ToString(), "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
         }
 
         private string DateToString(DateTime Date)
         {
-            return Date.ToString("yyyy-MM-DD HH:mm:ss", CultureInfo.InvariantCulture);
+            return Date.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
         }
 
         // GENERALISED DATABASE FUNCTIONS
@@ -167,18 +167,14 @@ namespace NEA
             {
                 connection.Open();
 
-                string sql = @"
-                    SELECT @field
-                    FROM @table
-                    WHERE @pkFieldName = @pk;";
+                string sql = $@"
+                    SELECT {field}
+                    FROM {table}
+                    WHERE {pkFieldName} = @pk;";
 
                 using (var command = new SqliteCommand(sql, connection))
                 {
-                    command.Parameters.AddWithValue("@field", field);
-                    command.Parameters.AddWithValue("@table", table);
-                    command.Parameters.AddWithValue("@pkFieldName", pkFieldName);
                     command.Parameters.AddWithValue("@pk", pk);
-
 
                     object result = command.ExecuteScalar();
 
@@ -346,6 +342,22 @@ namespace NEA
         {
             return RecordExistsFrom2Fields("User", "UserID", username, "PasswordHash", password);
         }
+
+        public DateTime GetUserDateCreated(string username)
+        {
+            return StringToDate(GetFieldFromKey<string>("User", "UserID", username, "DateCreated"));
+        }
+
+        public string GetUsernameFromEmail(string email)
+        {
+            return GetFieldFromKey<string>("User", "Email", email, "Username");
+        }
+
+        public string GetEmailFromUsername(string username)
+        {
+            return GetFieldFromKey<string>("User", "UserID", username, "Email");
+        }
+
 
         // EXERCISE METHODS
 

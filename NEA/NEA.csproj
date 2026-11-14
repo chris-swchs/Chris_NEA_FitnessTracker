@@ -98,6 +98,7 @@
     <Compile Include="CompatibilityMatrix.cs" />
     <Compile Include="EnumDefinitions.cs" />
     <Compile Include="DatabaseManager.cs" />
+    <Compile Include="ExerciseSecondaryMuscleDefinitions.cs" />
     <Compile Include="Forms\LoginForm.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -16,6 +16,7 @@ namespace NEA.Models.Entities
         public bool Completed { get; private set; }
         public int RestDuration { get; set; }
 
+        public Dictionary<MuscleGroup, double> SecondaryMuscleGroups { get; private set; }
         public Exercise(string exerciseName, string exerciseDescription, ExerciseType exerciseType, MuscleGroup targetMuscle, int restDuration)
         {
             ExerciseName = exerciseName;
@@ -23,12 +24,30 @@ namespace NEA.Models.Entities
             ExerciseType = exerciseType;
             TargetMuscle = targetMuscle;
             RestDuration = restDuration;
+
+            Dictionary<MuscleGroup, double> contributions;
+
+            if (ExerciseSecondaryMuscleDefinitions.SecondaryMuscleGroups.TryGetValue(
+                exerciseName, out contributions))
+            {
+                SecondaryMuscleGroups =
+                    new Dictionary<MuscleGroup, double>(contributions);
+            }
+            else
+            {
+                SecondaryMuscleGroups = new Dictionary<MuscleGroup, double>();
+            }
         }
 
 
         public void MarkCompleted()
         {
             Completed = true;
+        }
+
+        public bool isCompound()
+        {
+            return SecondaryMuscleGroups.Count >= 2;
         }
 
         public virtual float GetEstimatedDuration()

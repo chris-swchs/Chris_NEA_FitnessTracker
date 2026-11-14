@@ -41,6 +41,7 @@ namespace NEA.Forms
             {
                 // Successfully logged in
                 Console.WriteLine("logged in");
+                AcountManager.InitialiseLogin(usernameOrEmail, password);
                 // Open up main menu (not been implemented yet)    
             }
             else
