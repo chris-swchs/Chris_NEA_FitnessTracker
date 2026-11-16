@@ -12,18 +12,20 @@ namespace NEA.Models.Entities
         public string ExerciseName { get; set; }
         public string ExerciseDescription { get; set; }
         ExerciseType ExerciseType { get; set; }
+        MovementPattern MovementPattern { get; set; }
         MuscleGroup TargetMuscle {  get; set; }
         public bool Completed { get; private set; }
         public int RestDuration { get; set; }
 
         public Dictionary<MuscleGroup, double> SecondaryMuscleGroups { get; private set; }
-        public Exercise(string exerciseName, string exerciseDescription, ExerciseType exerciseType, MuscleGroup targetMuscle, int restDuration)
+        public Exercise(string exerciseName, string exerciseDescription, ExerciseType exerciseType, MovementPattern movementPattern, MuscleGroup targetMuscle, int restDuration)
         {
             ExerciseName = exerciseName;
             ExerciseDescription = exerciseDescription;
             ExerciseType = exerciseType;
             TargetMuscle = targetMuscle;
             RestDuration = restDuration;
+            MovementPattern = movementPattern;
 
             Dictionary<MuscleGroup, double> contributions;
 

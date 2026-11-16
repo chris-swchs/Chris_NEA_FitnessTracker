@@ -54,6 +54,36 @@ namespace NEA
         Pylometric
     }
 
+    public enum MovementPattern
+    {
+        VerticalPull,
+        HorizontalPush,
+        VerticalPush,
+        HorizontalPull,
+        HorizontalAbduction,
+        HorizontalAdduction,
+        ElbowExtension,
+        ElbowFlexion,
+        ShoulderAbduction,
+        ShoulderFlexion,
+        Lunge,
+        HipExtension,
+        HipHinge,
+        HipAdduction,
+        HipAbduction,
+        Squat,
+        AnklePlantarFlexion,
+        CoreFlexion,
+        CoreStabilisation,
+        CoreRotation,
+        WristExtension,
+        WristFlexion,
+        Running,
+        Cycling,
+        Rowing,
+        Other
+    }
+
     //Contains list of the possible sets of workout types
     public enum WorkoutType
     {

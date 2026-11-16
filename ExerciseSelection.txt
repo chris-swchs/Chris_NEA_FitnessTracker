@@ -1,0 +1,51 @@
+previousWorkoutSchedule)
+
+   exercises ← Database Exercises
+   selectedExercises ← new LinkedList
+   eligibleExercises ← FindEligibleExercises(workoutType, userSettings.AvailableEquipment)
+
+   previousWorkouts ← previousWorkoutSchedule.Workouts
+
+   targetMuscleCoverages (dictionary) ← CalculateTargetCoverage(userSettings, selectedMuscleGroups)
+   muscleCoverages (dictionary) ← InitialiseMuscleCoverage(selectedMuscleGroups)
+   
+   preferredWorkoutDuration ← userSettings.PreferredWorkoutDuration
+   totalDuration ← 0
+   
+   staticScores ← CalculateStaticScores(eligibleExercises, userSettings)
+   regenerationScores ← NULL
+
+   IF isRegenerating THEN
+      regenerationScores ← CalculateRegenerationScores(eligibleExercises, regenerationIndex, previousWorkouts)
+   ENDIF
+
+   WHILE totalDuration < preferredWorkoutDuration AND eligibleExercises.Length > 0
+
+      highestScore ← NegativeInfinity
+      highestScoreExercise ← NULL
+
+      FOR EACH exercise in eligibleExercises
+
+         IF totalDuration + exercise.EstimatedDuration <= preferredWorkoutDuration THEN
+
+score ← CalculateExerciseScore(exercise.ExerciseType, userSettings, muscleCoverages, targetMuscleCoverages, staticScores, regenerationScores)
+            IF score > highestScore THEN
+               highestScore ← score
+               highestScoreExercise ← exercise
+            ENDIF
+         ENDIF
+      ENDFOR
+
+      IF highestScoreExercise != NULL THEN
+         APPEND(selectedExercises, highestScoreExercise)
+         REMOVE(eligibleExercises, highestScoreExercise)
+
+         muscleCoverages ← UpdateMuscleCoverage(muscleCoverages, highestScoreExercise)
+         totalDuration ← totalDuration + highestScoreExercise.EstimatedDuration
+      ENDIF
+
+   ENDWHILE
+
+   RETURN selectedExercises
+
+ENDFUNCTION
