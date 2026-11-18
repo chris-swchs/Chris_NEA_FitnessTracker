@@ -11,9 +11,9 @@ namespace NEA.Models.Entities
         public int ExerciseID { get; set; }
         public string ExerciseName { get; set; }
         public string ExerciseDescription { get; set; }
-        ExerciseType ExerciseType { get; set; }
-        MovementPattern MovementPattern { get; set; }
-        MuscleGroup TargetMuscle {  get; set; }
+        public ExerciseType ExerciseType { get; set; }
+        public MovementPattern MovementPattern { get; set; }
+        public MuscleGroup TargetMuscle {  get; set; }
         public bool Completed { get; private set; }
         public int RestDuration { get; set; }
 
