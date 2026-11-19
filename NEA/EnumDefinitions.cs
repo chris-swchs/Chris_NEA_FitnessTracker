@@ -141,7 +141,7 @@ namespace NEA
     public static class EnumDefinitions
     {
         // TO DO - Make it return linked  list of muscle groups
-        public static MainMuscleGroup[] GetWorkoutTypeMuscleGroups(WorkoutType workoutType)
+        public static MainMuscleGroup[] GetWorkoutTypeMainMuscleGroups(WorkoutType workoutType)
         {
             switch (workoutType)
             {
@@ -176,5 +176,37 @@ namespace NEA
                     return new MainMuscleGroup[] { };
             }
         }
-    }
+
+        public static MuscleGroup[] GetMuscleGroupsFromMain(MainMuscleGroup mainMuscleGroup)
+        {
+            switch (mainMuscleGroup)
+            {
+                case MainMuscleGroup.Chest:
+                    return new MuscleGroup[] { MuscleGroup.UpperChest, MuscleGroup.LowerChest };
+
+                case MainMuscleGroup.Shoulders:
+                    return new MuscleGroup[] { MuscleGroup.FrontShoulders, MuscleGroup.SideShoulders, MuscleGroup.RearShoulders };
+
+                case MainMuscleGroup.Biceps:
+                    return new MuscleGroup[] { MuscleGroup.Biceps };
+
+                case MainMuscleGroup.Triceps:
+                    return new MuscleGroup[] { MuscleGroup.Triceps };
+
+                case MainMuscleGroup.Forearms:
+                    return new MuscleGroup[] { MuscleGroup.Forearms };
+
+                case MainMuscleGroup.Back:
+                    return new MuscleGroup[] { MuscleGroup.UpperBack, MuscleGroup.LowerBack };
+
+                case MainMuscleGroup.Legs:
+                    return new MuscleGroup[] { MuscleGroup.Quads, MuscleGroup.Hamstrings, MuscleGroup.Glutes, MuscleGroup.Adductors, MuscleGroup.Abductors, MuscleGroup.Calves };
+
+                case MainMuscleGroup.Core:
+                    return new MuscleGroup[] { MuscleGroup.UpperCore, MuscleGroup.LowerCore, MuscleGroup.Obliques };
+
+                default:
+                    return new MuscleGroup[] { };
+            }
+        }
 }

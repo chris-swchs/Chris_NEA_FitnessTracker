@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace NEA.Models.Entities
 {
     public class UserSettings
-    {
+    {     
         public Goal PrimaryGoal { get; set; }
         public Goal SecondaryGoal { get; set; }
         public int Age { get; set; }
@@ -21,7 +21,7 @@ namespace NEA.Models.Entities
         public Frequency CardioPreference { get; set; }
         public MainMuscleGroup MainMuscleGroupPriority { get; set; }
         public int RegenerationCount { get; set; }
-
+        public Equipment[] AvailableEquipment { get; set; }
         public UserSettings()
         {
             RegenerationCount = 0;

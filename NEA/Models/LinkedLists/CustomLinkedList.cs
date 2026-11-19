@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace NEA.Models.LinkedLists
 {
@@ -108,6 +109,23 @@ namespace NEA.Models.LinkedLists
                 counter++;
             }
             return linkedListArray; 
+        }
+
+        public bool Find(T value)
+        {
+            Node<T> current = head;
+
+            while (current != null)
+            {
+                if (EqualityComparer<T>.Default.Equals(current.Data, value))
+                {
+                    return true;
+                }
+
+                current = current.Next;
+            }
+
+            return false;
         }
 
         // Print the full list layout

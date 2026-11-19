@@ -463,33 +463,12 @@ namespace NEA
 
         // Returns a list of all the available equipment the user has
 
-        public string[] GetUserAvailableEquipment(string UserID)
+        public Equipment[] GetUserAvailableEquipment(string userID)
         {
-            List<string> Equipments = new List<string>();
-
-            using (var connection = new SqliteConnection(connectionString))
-            {
-                connection.Open();
-
-                string sql = @"
-                     SELECT Equipment
-                     FROM UserAvailableEquipment
-                     WHERE UserID = @UserID;";
-
-                using (var command = new SqliteCommand(sql, connection))
-                {
-                    command.Parameters.AddWithValue("@UserID", UserID);
-
-                    using (var reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            Equipments.Add(reader["Equipment"].ToString());
-                        }
-                    }
-                }
-                return Equipments.ToArray();
-            }
+            return Array.ConvertAll(
+                GetMultiValuesInFieldFromKey("UserAvailableEquipment", "UserID", userID, "Equipment"),
+                value => (Equipment)Enum.Parse(typeof(Equipment), value)
+            );
         }
 
         // EXERCISE-AVAILABLE-EQUIPMENT METHODS
@@ -518,34 +497,14 @@ namespace NEA
         }
 
         // Returns a list of all the equipment for which an exercise supports 
-        public string[] GetExerciseAvailableEquipment(string ExerciseID)
+        public Equipment[] GetExerciseAvailableEquipment(string exerciseID)
         {
-            List<string> Equipments = new List<string>();
-
-            using (var connection = new SqliteConnection(connectionString))
-            {
-                connection.Open();
-
-                string sql = @"
-                     SELECT Equipment
-                     FROM UserAvailableEquipment
-                     WHERE ExerciseID = @ExerciseID;";
-
-                using (var command = new SqliteCommand(sql, connection))
-                {
-                    command.Parameters.AddWithValue("@ExerciseID", ExerciseID);
-
-                    using (var reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            Equipments.Add(reader["Equipment"].ToString());
-                        }
-                    }
-                }
-                return Equipments.ToArray();
-            }
+            return Array.ConvertAll(
+                GetMultiValuesInFieldFromKey("ExerciseAvailableEquipment", "ExerciseID", exerciseID, "Equipment"),
+                value => (Equipment)Enum.Parse(typeof(Equipment), value)
+            );
         }
+
 
         // USER-SET-TARGETS METHODS
 
@@ -744,7 +703,40 @@ namespace NEA
             }
         }
 
-        public DateTime? GetMostRecentTimedExerciseDate(string userID, Exercise exercise)
+        // USER-REP-BASED-SET CONJOINED WITH USER-TIMED-EXERCISE METHODS
+        public DateTime? GetMostRecentDateOfWorkoutType(string userID, WorkoutType workoutType)
+        {
+            using (SqliteConnection connection =
+                new SqliteConnection(connectionString))
+            {
+                connection.Open();
+
+                string query = @"
+                SELECT MAX(Date)
+                FROM Workout
+                WHERE WorkoutType = @WorkoutType
+                AND UserID = @UserID
+                AND Completed = 1;";
+
+                using (SqliteCommand command =
+                    new SqliteCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@WorkoutType", workoutType.ToString());
+                    command.Parameters.AddWithValue("@UserID", userID);
+
+                    object result = command.ExecuteScalar();
+
+                    if (result == null || result == DBNull.Value)
+                    {
+                        return null;
+                    }
+
+                    return StringToDate(result);
+                }
+            }
+        }
+
+        public DateTime? GetMostRecentExerciseDate(string userID, Exercise exercise)
         {
             bool repBased = false;
 
@@ -786,37 +778,18 @@ namespace NEA
             }
         }
 
-        // USER-REP-BASED-SET CONJOINED WITH USER-TIMED-EXERCISE METHODS
-        public DateTime? GetMostRecentDateOfWorkoutType(string userID, WorkoutType workoutType)
+        public int GetNumberOfExercisesBeforeDate(DateTime Date, Exercise exercise)
         {
-            using (SqliteConnection connection =
-                new SqliteConnection(connectionString))
+
+            if (exercise is RepBasedExercise)
             {
-                connection.Open();
-
-                string query = @"
-                SELECT MAX(Date)
-                FROM Workout
-                WHERE WorkoutType = @WorkoutType
-                AND UserID = @UserID
-                AND Completed = 1;";
-
-                using (SqliteCommand command =
-                    new SqliteCommand(query, connection))
-                {
-                    command.Parameters.AddWithValue("@WorkoutType", workoutType.ToString());
-                    command.Parameters.AddWithValue("@UserID", userID);
-
-                    object result = command.ExecuteScalar();
-
-                    if (result == null || result == DBNull.Value)
-                    {
-                        return null;
-                    }
-
-                    return StringToDate(result);
-                }
+                GetMultiValuesInFieldFromKey("UserRepBasedexercise", "ExerciseID", exerciseID, "Date");
             }
+            else
+            {
+                GetMultiValuesInFieldFromKey("UserRepBasedexercise", "ExerciseID", exerciseID, "Equipment");
+            }
+             
         }
 
 

@@ -17,6 +17,10 @@ namespace NEA
             WorkoutType_CardioPreference
         { get; private set; }
 
+        public static CompatibilityMatrix<ExerciseType, Goal>
+           ExerciseType_Goal
+        { get; private set; }
+
         static CompatibilityDefinitions()
         {
             WorkoutType_Goal =
@@ -28,9 +32,13 @@ namespace NEA
             WorkoutType_CardioPreference =
                 new CompatibilityMatrix<WorkoutType, Frequency>();
 
+            ExerciseType_Goal =
+                new CompatibilityMatrix<ExerciseType, Goal>();
+
             InitialiseWorkoutType_Goals();
             InitialiseWorkoutType_MuscleGroup();
             InitialiseWorkoutType_CardioPreference();
+            InitialiseExerciseType_Goals();
         }
 
         private static void InitialiseWorkoutType_Goals()
@@ -327,6 +335,74 @@ namespace NEA
                     { Frequency.Low, 0.75 },
                     { Frequency.Moderate, 0.80 },
                     { Frequency.High, 0.60 }
+                });
+        }
+
+        private static void InitialiseExerciseType_Goals()
+        {
+            ExerciseType_Goal.AddRange(
+                ExerciseType.Strength,
+                new Dictionary<Goal, double>
+                {
+            { Goal.Strength, 1.00 },
+            { Goal.MuscleGrowth, 0.95 },
+            { Goal.CardiovascularFitness, 0.25 },
+            { Goal.GeneralFitness, 0.85 },
+            { Goal.MuscularEndurance, 0.70 },
+            { Goal.Power, 0.85 },
+            { Goal.Mobility, 0.20 }
+                });
+
+            ExerciseType_Goal.AddRange(
+                ExerciseType.Flexibility,
+                new Dictionary<Goal, double>
+                {
+            { Goal.Strength, 0.15 },
+            { Goal.MuscleGrowth, 0.10 },
+            { Goal.CardiovascularFitness, 0.20 },
+            { Goal.GeneralFitness, 0.65 },
+            { Goal.MuscularEndurance, 0.20 },
+            { Goal.Power, 0.20 },
+            { Goal.Mobility, 1.00 }
+                });
+
+            ExerciseType_Goal.AddRange(
+                ExerciseType.Cardio,
+                new Dictionary<Goal, double>
+                {
+            { Goal.Strength, 0.20 },
+            { Goal.MuscleGrowth, 0.25 },
+            { Goal.CardiovascularFitness, 1.00 },
+            { Goal.GeneralFitness, 0.90 },
+            { Goal.MuscularEndurance, 0.80 },
+            { Goal.Power, 0.30 },
+            { Goal.Mobility, 0.25 }
+                });
+
+            ExerciseType_Goal.AddRange(
+                ExerciseType.Balance,
+                new Dictionary<Goal, double>
+                {
+            { Goal.Strength, 0.35 },
+            { Goal.MuscleGrowth, 0.20 },
+            { Goal.CardiovascularFitness, 0.30 },
+            { Goal.GeneralFitness, 0.70 },
+            { Goal.MuscularEndurance, 0.40 },
+            { Goal.Power, 0.45 },
+            { Goal.Mobility, 0.75 }
+                });
+
+            ExerciseType_Goal.AddRange(
+                ExerciseType.Pylometric,
+                new Dictionary<Goal, double>
+                {
+            { Goal.Strength, 0.70 },
+            { Goal.MuscleGrowth, 0.45 },
+            { Goal.CardiovascularFitness, 0.75 },
+            { Goal.GeneralFitness, 0.80 },
+            { Goal.MuscularEndurance, 0.65 },
+            { Goal.Power, 1.00 },
+            { Goal.Mobility, 0.40 }
                 });
         }
     }
