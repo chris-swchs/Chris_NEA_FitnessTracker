@@ -52,6 +52,7 @@ namespace NEA
                       ExerciseID INTEGER PRIMARY KEY AUTOINCREMENT,
                       Name TEXT NOT NULL,
                       ExerciseType TEXT NOT NULL,
+                      MovementPattern TEXT NOT NULL,
                       TargetMuscle TEXT NOT NULL,
                       Details TEXT NOT NULL
                   );
@@ -425,6 +426,11 @@ namespace NEA
             return (ExerciseType)Enum.Parse(typeof(ExerciseType), GetFieldFromKey<string>("Exercise", "ExerciseID", ExerciseID, "ExerciseType"));
         }
 
+        public MovementPattern GetExerciseMovementPattern(string ExerciseID)
+        {
+            return (MovementPattern)Enum.Parse(typeof(MovementPattern), GetFieldFromKey<string>("Exercise", "ExerciseID", ExerciseID, "MovementPattern"));
+        }
+
         public MuscleGroup GetExerciseTargetMuscle(string ExerciseID)
         {
             return (MuscleGroup)Enum.Parse(typeof(MuscleGroup), GetFieldFromKey<string>("Exercise", "ExerciseID", ExerciseID, "TargetMuscle"));
@@ -624,20 +630,22 @@ namespace NEA
             }
         }
 
+        // TO DO - MAKE TABLE ACOUNT FOR EXERCISE PATTERNS
         public TimedExercise GetTargetsForUserTimedExercise(string UserID, string ExerciseID)
         {
             string PK = GetKeyFromTwoFields("UserTimedTargets", "UserTimedTargetsID", "UserID", UserID, "ExerciseID", ExerciseID);
-            float weight = GetFieldFromKey<float>("UserTimedTargets", "UserTimedTargetsID", PK, "Weight");
-            float speed = GetFieldFromKey<float>("UserTimedTargets", "UserTimedTargetsID", PK, "Speed");
-            float duration = GetFieldFromKey<float>("UserTimedTargets", "UserTimedTargetsID", PK, "Duration");
+            double weight = GetFieldFromKey<double>("UserTimedTargets", "UserTimedTargetsID", PK, "Weight");
+            double speed = GetFieldFromKey<double>("UserTimedTargets", "UserTimedTargetsID", PK, "Speed");
+            int duration = GetFieldFromKey<int>("UserTimedTargets", "UserTimedTargetsID", PK, "Duration");
             int RestDuration = GetFieldFromKey<int>("UserTimedTargets", "UserTimedTargetsID", PK, "RestDuration");
 
             string exerciseName = GetExerciseName(ExerciseID);
             string exerciseDescription = GetExerciseDetails(ExerciseID);
             MuscleGroup exerciseTargetMuscle = GetExerciseTargetMuscle(ExerciseID);
+            MovementPattern movementPattern = GetExerciseMovementPattern(ExerciseID);
             ExerciseType exerciseType = GetExerciseType(ExerciseID);
 
-            TimedExercise timedExercise = new TimedExercise(exerciseName, exerciseDescription, exerciseType, exerciseTargetMuscle,
+            TimedExercise timedExercise = new TimedExercise(exerciseName, exerciseDescription, exerciseType, movementPattern, exerciseTargetMuscle,
                 RestDuration, weight, speed, duration);
 
             return timedExercise;
@@ -738,12 +746,8 @@ namespace NEA
 
         public DateTime? GetMostRecentExerciseDate(string userID, Exercise exercise)
         {
-            bool repBased = false;
 
-            if (exercise is RepBasedExercise)
-            {
-                repBased = true;
-            }
+            string tableName = exercise is RepBasedExercise ? "UserRepBasedExercise" : "UserTimedExercise";
 
             using (SqliteConnection connection =
                 new SqliteConnection(connectionString))
@@ -764,7 +768,7 @@ namespace NEA
                 {
                     command.Parameters.AddWithValue("@ExerciseID", exercise.ExerciseID);
                     command.Parameters.AddWithValue("@UserID", userID);
-                    command.Parameters.AddWithValue("@TableName", repBased ? "UserRepBasedexercise" : "UserTimedExercise");
+                    command.Parameters.AddWithValue("@TableName", tableName);
 
                     object result = command.ExecuteScalar();
 
@@ -778,18 +782,37 @@ namespace NEA
             }
         }
 
-        public int GetNumberOfExercisesBeforeDate(DateTime Date, Exercise exercise)
+        public int GetExerciseCompletionCount(string userID, Exercise exercise, DateTime startDate)
         {
+            string tableName = exercise is RepBasedExercise? "UserRepBasedExercise" : "UserTimedExercise";
 
-            if (exercise is RepBasedExercise)
+            using (SqliteConnection connection =
+                new SqliteConnection(connectionString))
             {
-                GetMultiValuesInFieldFromKey("UserRepBasedexercise", "ExerciseID", exerciseID, "Date");
+                connection.Open();
+
+                string query = $@"
+                SELECT COUNT(DISTINCT w.WorkoutID)
+                FROM {tableName} AS t
+                INNER JOIN Workout AS w
+                ON t.WorkoutID = w.WorkoutID
+                WHERE t.ExerciseID = @ExerciseID
+                AND w.UserID = @UserID
+                AND w.Completed = 1
+                AND w.Date >= @StartDate
+                AND w.Date <= @EndDate;";
+
+                using (SqliteCommand command =
+                    new SqliteCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@ExerciseID", exercise.ExerciseID);
+                    command.Parameters.AddWithValue("@UserID", userID);
+                    command.Parameters.AddWithValue("@StartDate", startDate.ToString("yyyy-MM-dd HH:mm:ss"));
+                    command.Parameters.AddWithValue("@EndDate", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+
+                    return Convert.ToInt32(command.ExecuteScalar());
+                }
             }
-            else
-            {
-                GetMultiValuesInFieldFromKey("UserRepBasedexercise", "ExerciseID", exerciseID, "Equipment");
-            }
-             
         }
 
 

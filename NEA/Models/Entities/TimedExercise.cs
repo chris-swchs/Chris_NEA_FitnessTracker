@@ -8,10 +8,10 @@ namespace NEA.Models.Entities
 {
     public class TimedExercise : Exercise
     {
-        public float Duration { get; set; }
-        public float Weight { get; set; }
-        public float Speed { get; set; }
-        public TimedExercise(string exerciseName, string exerciseDescription, ExerciseType exerciseType, MovementPattern movementPattern, MuscleGroup targetMuscle, int restDuration, float weight, float speed, float duration)
+        public int Duration { get; set; }
+        public double Weight { get; set; }
+        public double Speed { get; set; }
+        public TimedExercise(string exerciseName, string exerciseDescription, ExerciseType exerciseType, MovementPattern movementPattern, MuscleGroup targetMuscle, int restDuration, double weight, double speed, int duration)
             : base(exerciseName, exerciseDescription, exerciseType, movementPattern, targetMuscle, restDuration)
         {
             Duration = duration;
@@ -19,7 +19,7 @@ namespace NEA.Models.Entities
             Speed = speed;
         }
 
-        public override float GetEstimatedDuration()
+        public override double GetEstimatedDuration()
         {
             return Duration + RestDuration;
         }

@@ -122,7 +122,8 @@ namespace NEA.Services
                 (4.0 * Gp) + (4.0 * Gs) + (3.0 * M) + (2.0 * C) - (4.0 * R) - (3.0 * P);
 
 
-            double score =  CalculateScore(PrimaryGoalCompatibility, SecondaryGoalCompatibility, MuscleGroupCompatility, CardioPreferenceCompatibility, CalculateRecenency(DaysSinceLastUsed), CalculatePreviousSchedulePenalty(workoutType,  previousScheduleSlots));
+            double score =  CalculateScore(PrimaryGoalCompatibility, SecondaryGoalCompatibility, MuscleGroupCompatility, CardioPreferenceCompatibility,
+                CalculateRecenency(DaysSinceLastUsed), CalculatePreviousSchedulePenalty(workoutType,  previousScheduleSlots));
             return score > MinimumScoreForVariance? (score + CalculateVariation(maximumVariance, random.NextDouble())) : MinimumScoreForVariance;
         }
     }

@@ -146,7 +146,7 @@ namespace NEA
             switch (workoutType)
             {
                 case WorkoutType.FullBody:
-                    return new MainMuscleGroup[] { MainMuscleGroup.Chest, MainMuscleGroup.Shoulders, MainMuscleGroup.Biceps, MainMuscleGroup.Triceps, MainMuscleGroup.Forearms, MainMuscleGroup.Back, MainMuscleGroup.Legs,  MainMuscleGroup.Core };
+                    return new MainMuscleGroup[] { MainMuscleGroup.Chest, MainMuscleGroup.Shoulders, MainMuscleGroup.Biceps, MainMuscleGroup.Triceps, MainMuscleGroup.Forearms, MainMuscleGroup.Back, MainMuscleGroup.Legs, MainMuscleGroup.Core };
 
                 case WorkoutType.UpperBody:
                     return new MainMuscleGroup[] { MainMuscleGroup.Chest, MainMuscleGroup.Shoulders, MainMuscleGroup.Biceps, MainMuscleGroup.Triceps, MainMuscleGroup.Forearms, MainMuscleGroup.Back, MainMuscleGroup.Core };
@@ -209,4 +209,49 @@ namespace NEA
                     return new MuscleGroup[] { };
             }
         }
+
+        public static MainMuscleGroup GetMainMuscleGroup(MuscleGroup muscleGroup)
+        {
+            switch (muscleGroup)
+            {
+                case MuscleGroup.UpperChest:
+                case MuscleGroup.LowerChest:
+                    return MainMuscleGroup.Chest;
+
+                case MuscleGroup.FrontShoulders:
+                case MuscleGroup.SideShoulders:
+                case MuscleGroup.RearShoulders:
+                    return MainMuscleGroup.Shoulders;
+
+                case MuscleGroup.Biceps:
+                    return MainMuscleGroup.Biceps;
+
+                case MuscleGroup.Triceps:
+                    return MainMuscleGroup.Triceps;
+
+                case MuscleGroup.Forearms:
+                    return MainMuscleGroup.Forearms;
+
+                case MuscleGroup.UpperBack:
+                case MuscleGroup.LowerBack:
+                    return MainMuscleGroup.Back;
+
+                case MuscleGroup.Quads:
+                case MuscleGroup.Hamstrings:
+                case MuscleGroup.Glutes:
+                case MuscleGroup.Adductors:
+                case MuscleGroup.Abductors:
+                case MuscleGroup.Calves:
+                    return MainMuscleGroup.Legs;
+
+                case MuscleGroup.UpperCore:
+                case MuscleGroup.LowerCore:
+                case MuscleGroup.Obliques:
+                    return MainMuscleGroup.Core;
+
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(muscleGroup));
+            }
+        }
+    }
 }

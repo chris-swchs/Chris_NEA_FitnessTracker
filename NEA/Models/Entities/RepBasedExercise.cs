@@ -10,7 +10,7 @@ namespace NEA.Models.Entities
     {
         public Set[] Sets { get; private set; }
 
-        public RepBasedExercise(string exerciseName, string exerciseDescription, ExerciseType exerciseType, MovementPattern movementPattern MuscleGroup targetMuscle, int restDuration, Set[] sets)
+        public RepBasedExercise(string exerciseName, string exerciseDescription, ExerciseType exerciseType, MovementPattern movementPattern, MuscleGroup targetMuscle, int restDuration, Set[] sets)
             : base(exerciseName, exerciseDescription, exerciseType, movementPattern, targetMuscle, restDuration)
         {
             Sets = sets;
@@ -29,9 +29,9 @@ namespace NEA.Models.Entities
             return completedCount;
         }
 
-        public override float GetEstimatedDuration()
+        public override double GetEstimatedDuration()
         {
-            float duration = 0;
+            double duration = 0;
             foreach (Set set in Sets)
             {
                 duration = duration + (set.Reps * 1) + (set.RestDuration);

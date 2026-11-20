@@ -52,9 +52,9 @@ namespace NEA.Models.Entities
             return SecondaryMuscleGroups.Count >= 2;
         }
 
-        public virtual float GetEstimatedDuration()
+        public virtual double GetEstimatedDuration()
         {
-            return 0;
+            return 5.0;
         }
     }
 }
